@@ -1,0 +1,1 @@
+<!-- http://sms.autobysms.com/app/smsapi/index.php?key=36365EF4C86D67&campaign=0&routeid=9&type=text&contacts=9711784343&senderid=MAKLIF&msg=MAK LIFE%0D%0AColl. Ctr ID: 5%0D%0AFarmer Id: %0D%0ADate: 17July2024_Pm%0D%0AMilk Type: %0D%0AQty: 100%0D%0AFAT: 2.5%0D%0ASNF: 3.0%0D%0AWATER %: %0D%0ARATE: 30%0D%0ATot Amt.: Rs.3000%0D%0A&template_id=1207165769139334975" -->
