@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:milkcollection/app/theme/app_colors.dart';
 import 'package:milkcollection/app/widgets/backdround_container.dart';
 import 'package:milkcollection/app/widgets/custom_button.dart';
@@ -472,9 +473,36 @@ class FarmerView extends GetView<FarmerController> {
                         ],
                       ),
                       CustomButton(
-                        onPressed: () async => controller.type
-                            ? controller.localFarmerUpdate()
-                            : controller.addFarmer(),
+                        onPressed: () async {
+                          if (controller.type) {
+                            controller.localFarmerUpdate();
+                          } else {
+                            bool result =
+                                await InternetConnection().hasInternetAccess;
+
+                            if (result) {
+                              controller.createFarmerLocal(1);
+
+                              controller.addFarmer().then((onValue) async {
+                                await controller.farmerlistController
+                                    .getFarmerListLocal()
+                                    .then((v) {
+                                  Get.back();
+                                });
+                              });
+                            } else {
+                              controller
+                                  .createFarmerLocal(0)
+                                  .then((onValue) async {
+                                await controller.farmerlistController
+                                    .getFarmerListLocal()
+                                    .then((v) {
+                                  Get.back();
+                                });
+                              });
+                            }
+                          }
+                        },
                         title: controller.type ? "Update" : "Save",
                       ),
                       const SizedBox(

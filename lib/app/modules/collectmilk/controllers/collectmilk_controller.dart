@@ -230,7 +230,6 @@ class CollectmilkController extends GetxController {
               double.parse(snfDC) == double.parse(rateCMChartData[i].snf)) {
             priceP = rateCMChartData[i].price.toPrecision(2).toString();
             // print(price);
-            print("price:$priceP");
           }
         } else {
           // homeController.
@@ -240,7 +239,6 @@ class CollectmilkController extends GetxController {
               double.parse(homeController.snf) ==
                   double.parse(rateCMChartData[i].snf)) {
             priceP = rateCMChartData[i].price.toPrecision(2).toString();
-            print("price:$priceP");
           }
         }
       }
@@ -253,7 +251,6 @@ class CollectmilkController extends GetxController {
               double.parse(snfDC) == double.parse(rateBMChartData[i].snf)) {
             priceP = rateBMChartData[i].price.toPrecision(2).toString();
             // print(price);
-            print("price:$priceP");
           }
         } else {
           // homeController.
@@ -262,7 +259,6 @@ class CollectmilkController extends GetxController {
               double.parse(homeController.snf) ==
                   double.parse(rateBMChartData[i].snf)) {
             priceP = rateBMChartData[i].price.toPrecision(2).toString();
-            print("price:$priceP");
           }
         }
       }
@@ -286,7 +282,6 @@ class CollectmilkController extends GetxController {
                   (((rateCMChartData[i].price) * (double.parse(quantityDC)))
                           .toPrecision(2))
                       .toString();
-              print("totalAmount:$totalAmountP");
             }
           }
         } else {
@@ -301,7 +296,6 @@ class CollectmilkController extends GetxController {
                           double.parse(homeController.quantity))
                       .toPrecision(2))
                   .toString();
-              print("totalAmount:$totalAmountP");
             }
           }
         }
@@ -319,7 +313,6 @@ class CollectmilkController extends GetxController {
                   (((rateBMChartData[i].price) * (double.parse(quantityDC)))
                           .toPrecision(2))
                       .toString();
-              print("totalAmount:$totalAmountP");
             }
           }
         } else {
@@ -334,7 +327,6 @@ class CollectmilkController extends GetxController {
                           double.parse(homeController.quantity))
                       .toPrecision(2))
                   .toString();
-              print("totalAmount:$totalAmountP");
             }
           }
         }
@@ -398,9 +390,7 @@ class CollectmilkController extends GetxController {
           pd.close();
         }
       } else {}
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 
   Future<void> getCollectionThirtyDaysData() async {
@@ -473,13 +463,11 @@ class CollectmilkController extends GetxController {
       if (farmerDataList[i].farmerId.toString() !=
           farmerfinalId.toString().trim()) {
         farmerData = FarmerListModel(farmerName: "Unknown");
-        print("farmerData:${farmerData.farmerName}");
       }
 
       if (farmerDataList[i].farmerId.toString() ==
           farmerfinalId.toString().trim()) {
         farmerData = farmerDataList[i];
-        print("farmerData:${farmerData.farmerName}");
 
         break;
       }
@@ -558,7 +546,7 @@ class CollectmilkController extends GetxController {
             // TextInputFormatter(decimalRange: 1),
             FilteringTextInputFormatter.digitsOnly,
           ],
-          maxLength: 10,
+          // maxLength: 10,
         ),
         // cancel: ,
         confirm: Padding(
@@ -627,7 +615,6 @@ class CollectmilkController extends GetxController {
                           value: "AM",
                           groupValue: shift,
                           onChanged: (String? i) {
-                            print(i);
                             shift = i!;
                             shiftTime = 1;
                           },
@@ -655,7 +642,6 @@ class CollectmilkController extends GetxController {
                           value: "PM",
                           groupValue: shift,
                           onChanged: (String? i) {
-                            print(i);
                             shift = i!;
                             shiftTime = 2;
                           },
@@ -913,7 +899,6 @@ class CollectmilkController extends GetxController {
         progress = false;
       }
     } catch (e) {
-      print(e.toString());
       progress = false;
     }
     // emptyData();
@@ -949,7 +934,7 @@ class CollectmilkController extends GetxController {
         Shift: shift.capitalizeFirst,
         Total_Amt: double.parse(getTotalAmount()),
         FUploaded: result ? 1 : 0);
-    await homeController.fetchMilkCollectionDateWise();
+    // await homeController.fetchMilkCollectionDateWise();
   }
 
   void emptyData() {
@@ -1011,8 +996,6 @@ class CollectmilkController extends GetxController {
       if (res.statusCode == 200) {
         Utils.showSnackbar(jsonDecode(res.body)["message"]);
       } else {}
-    } catch (e) {
-      print(e.toString());
-    }
+    } catch (e) {}
   }
 }

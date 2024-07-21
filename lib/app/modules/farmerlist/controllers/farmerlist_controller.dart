@@ -50,7 +50,7 @@ class FarmerlistController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    bool result = await InternetConnection().hasInternetAccess;
+    // bool result = await InternetConnection().hasInternetAccess;
 
     // if (result) {
     //   await getFarmerList();
@@ -83,49 +83,6 @@ class FarmerlistController extends GetxController {
 
     farmerData.assignAll(await farmerDB.fetchAll());
     circularProgress = false;
-  }
-
-  Future<void> postMilkCollectionDataDB() async {
-    if (restoreData.isNotEmpty) {
-      for (var e in restoreData) {
-        if (e.FUploaded == 0) {
-          try {
-            var res = await http
-                .post(Uri.parse("$baseUrlConst/$dailyCollection"), body: {
-              "Collection_Date": e.collectionDate,
-              "Inserted_Time": e.insertedTime,
-              "Calculations_ID": e.calculationsId,
-              "FarmerId": e.farmerId,
-              "Farmer_Name": e.farmerName,
-              "Collection_Mode": e.collectionMode,
-              "Scale_Mode": e.scaleMode,
-              "Analyze_Mode": e.analyzeMode,
-              "Milk_Status": e.milkStatus,
-              "Milk_Type": e.milkType,
-              "Rate_Chart_Name": e.rateChartName,
-              "Qty": e.qty,
-              "FAT": e.fat,
-              "SNF": e.snf,
-              "Added_Water": e.addedWater,
-              "Rate_Per_Liter": e.ratePerLiter,
-              "Total_Amt": e.totalAmt,
-              "CollectionCenterId": e.collectionCenterId,
-              "CollectionCenterName": e.collectionCenterName,
-              "Shift": e.shift,
-            });
-
-            if (res.statusCode == 200 && jsonDecode(res.body) == "Inserted") {
-            } else {
-              //
-            }
-            // circularProgress = false;
-          } catch (e) {
-            print(e);
-          }
-          // circularProgress = false;
-        }
-      }
-    }
   }
 
   Future<void> getSearchFarmerData() async {

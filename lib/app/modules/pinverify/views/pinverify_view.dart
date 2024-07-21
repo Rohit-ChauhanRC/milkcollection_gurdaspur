@@ -87,7 +87,7 @@ class PinverifyView extends GetView<PinverifyController> {
                                     const TextInputType.numberWithOptions(
                                   signed: true,
                                 ),
-                                maxLength: 10,
+                                // maxLength: 4,
                                 validator: (val) => val!.length < 3
                                     ? "Field is required!"
                                     : null,
@@ -101,7 +101,10 @@ class PinverifyView extends GetView<PinverifyController> {
                   height: 20.h,
                 ),
                 Obx(() => controller.circularProgress
-                    ? Container(
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
                         width: Get.width,
                         // padding: const EdgeInsets.all(20),
                         margin:
@@ -115,9 +118,6 @@ class PinverifyView extends GetView<PinverifyController> {
                           },
                           title: "Login",
                         ),
-                      )
-                    : const Center(
-                        child: CircularProgressIndicator(),
                       )),
                 SizedBox(
                   height: 20.h,

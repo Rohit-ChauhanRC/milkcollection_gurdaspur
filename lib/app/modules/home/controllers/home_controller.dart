@@ -934,7 +934,7 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              maxLength: 10,
+              // maxLength: 10,
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -961,7 +961,7 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              maxLength: 10,
+              // maxLength: 10,
             ),
           ],
         ),

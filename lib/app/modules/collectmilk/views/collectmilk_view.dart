@@ -258,7 +258,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                   },
                   // keyboardType:
                   //     const TextInputType.numberWithOptions(signed: true),
-                  maxLength: 4,
+                  // maxLength: 4,
                   // validator: (val) =>
                   //     val!.length < 1 ? "Field is required!" : null,
                 ),
@@ -312,7 +312,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                   DecimalTextInputFormatter(decimalRange: 1),
                                   LengthLimitingTextInputFormatter(3),
                                 ],
-                                maxLength: 3,
+                                // maxLength: 3,
                               ),
                             )),
                     ],
@@ -360,7 +360,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                   DecimalTextInputFormatter(decimalRange: 1),
                                   LengthLimitingTextInputFormatter(3),
                                 ],
-                                maxLength: 10,
+                                // maxLength: 10,
                               ),
                             )),
                     ],
@@ -409,7 +409,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                   DecimalTextInputFormatter(decimalRange: 1),
                                   // LengthLimitingTextInputFormatter(4),
                                 ],
-                                maxLength: 10,
+                                // maxLength: 10,
                               ),
                             )),
                     ],
@@ -459,7 +459,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                           DecimalTextInputFormatter(decimalRange: 1),
                           LengthLimitingTextInputFormatter(3),
                         ],
-                        maxLength: 3,
+                        // maxLength: 3,
                       ),
                     )),
               SizedBox(
@@ -673,9 +673,9 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                       if (result) {
                                         await controller.sendCollection();
                                         await controller.checkSmsFlag();
-                                        await controller.homeController
-                                            .fetchMilkCollectionDateWise();
                                       }
+                                      await controller.homeController
+                                          .fetchMilkCollectionDateWise();
 
                                       controller.emptyData();
                                       controller.progress = false;
@@ -853,7 +853,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                     label: "Please enter FarmerId...",
                     onChanged: onChanged1,
                     keyboardType: TextInputType.text,
-                    maxLength: 10,
+                    // maxLength: 10,
                   ),
                 )),
           ],
@@ -881,7 +881,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                     label: "Please enter FarmerId...",
                     onChanged: onChanged2,
                     keyboardType: TextInputType.text,
-                    maxLength: 10,
+                    // maxLength: 10,
                   ),
                 )),
           ],
@@ -909,7 +909,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                     label: "Please enter FarmerId...",
                     onChanged: onChanged3,
                     keyboardType: TextInputType.text,
-                    maxLength: 10,
+                    // maxLength: 10,
                   ),
                 )),
           ],

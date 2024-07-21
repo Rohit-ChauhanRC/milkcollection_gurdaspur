@@ -208,77 +208,41 @@ class FarmerController extends GetxController {
 
       if (res.statusCode == 200 && jsonDecode(res.body) == "Added succes..") {
         Utils.showSnackbar("Add Successfully!");
-        // await farmerlistController.getFarmerList();
-
-        //
-        await farmerlistController.farmerDB.create(
-          farmerId: int.tryParse(getFarmerIdFinal())!,
-          farmerName: farmerName,
-          bankName: bankName.isNotEmpty ? bankName : "null",
-          branchName: branchName.isNotEmpty ? branchName : "null",
-          aadharCardNo: aadharCard,
-          accountName: accountNumber.isNotEmpty ? accountNumber : "null",
-          address: address,
-          centerID: int.tryParse("${box.read("centerId")}")!,
-          exportParameter1: "0",
-          exportParameter2: "0",
-          exportParameter3: "0",
-          iFSCCode: ifscCode.isNotEmpty ? ifscCode : "null",
-          mCPGroup: "Maklife",
-          mobileNumber: mobileNumber,
-          modeOfPay: radio,
-          noOfBuffalos: int.tryParse(numberOfBuffalo),
-          noOfCows: int.tryParse(numberOfCows),
-          rFID: "null",
-          FUploaded: 1,
-        );
-        // await farmerlistController.pinverifyController.getFarmerList();
-        // farmerlistController.farmerData
-        //     .assignAll(await farmerlistController.farmerDB.fetchAll());
-
-        // Utils.showDialog(json.decode(res.body));
       }
       circularProgress = true;
     } catch (e) {
       // apiLopp(i);
       print(e);
       circularProgress = true;
-      await farmerlistController.farmerDB.create(
-        farmerId: int.tryParse(getFarmerIdFinal())!,
-        farmerName: farmerName,
-        bankName: bankName,
-        branchName: branchName,
-        aadharCardNo: aadharCard,
-        accountName: accountNumber,
-        address: address,
-        centerID: int.tryParse("${box.read("centerId")}")!,
-        exportParameter1: "0",
-        exportParameter2: "0",
-        exportParameter3: "0",
-        iFSCCode: ifscCode,
-        mCPGroup: "Maklife",
-        mobileNumber: mobileNumber,
-        modeOfPay: radio,
-        noOfBuffalos: int.tryParse(numberOfBuffalo),
-        noOfCows: int.tryParse(numberOfCows),
-        rFID: "null",
-        FUploaded: 0,
-      );
     }
-    // bool result = await InternetConnection().hasInternetAccess;
 
-    // if (result) {
-    //   await farmerlistController.getFarmerList().then((v) {
-    //     // farmerlistController.onInit();
-    //     Get.back();
-    //   });
-    // } else {
-    await farmerlistController.getFarmerListLocal().then((v) {
-      // farmerlistController.onInit();
+    // await farmerlistController.getFarmerListLocal().then((v) {
+    //   Get.back();
+    // });
+  }
 
-      Get.back();
-    });
-    // }
+  Future<void> createFarmerLocal(int fupload) async {
+    await farmerlistController.farmerDB.create(
+      farmerId: int.tryParse(getFarmerIdFinal())!,
+      farmerName: farmerName,
+      bankName: bankName,
+      branchName: branchName,
+      aadharCardNo: aadharCard,
+      accountName: accountNumber,
+      address: address,
+      centerID: int.tryParse("${box.read("centerId")}")!,
+      exportParameter1: "0",
+      exportParameter2: "0",
+      exportParameter3: "0",
+      iFSCCode: ifscCode,
+      mCPGroup: "Maklife",
+      mobileNumber: mobileNumber,
+      modeOfPay: radio,
+      noOfBuffalos: int.tryParse(numberOfBuffalo),
+      noOfCows: int.tryParse(numberOfCows),
+      rFID: "null",
+      FUploaded: fupload,
+    );
   }
 
   Future<void> localFarmerUpdate() async {

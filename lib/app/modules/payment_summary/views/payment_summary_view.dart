@@ -163,7 +163,7 @@ class PaymentSummaryView extends GetView<PaymentSummaryController> {
                         }
                       },
                       keyboardType: TextInputType.text,
-                      maxLength: 10,
+                      // maxLength: 10,
                     ),
                   )),
               const SizedBox(

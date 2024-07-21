@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -26,7 +24,7 @@ class PinverifyController extends GetxController {
 
   GlobalKey<FormState> loginFormKey = GlobalKey();
 
-  final RxBool _circularProgress = true.obs;
+  final RxBool _circularProgress = false.obs;
   bool get circularProgress => _circularProgress.value;
   set circularProgress(bool v) => _circularProgress.value = v;
 
@@ -89,15 +87,16 @@ class PinverifyController extends GetxController {
       bool result = await InternetConnection().hasInternetAccess;
 
       if (result) {
-        circularProgress = false;
+        circularProgress = true;
         await getFamerDataDB().then((v) async {
           await getFarmerList().then((value) async {
             await postMilkCollectionDataDB().then((value) async {
-              // restoreData.assignAll(await milkCollectionDB.fetchAll());
-              box.write(verifyConst, true).then((value) => {
-                    circularProgress = true,
-                    Get.offNamed(Routes.HOME),
-                  });
+              await geMilkCollectionList().then((v) {
+                box.write(verifyConst, true).then((value) => {
+                      circularProgress = false,
+                      Get.offNamed(Routes.HOME),
+                    });
+              });
             });
           });
         });
@@ -114,39 +113,51 @@ class PinverifyController extends GetxController {
     if (farmerData.isNotEmpty) {
       for (var e in farmerData) {
         if (e.FUploaded == 0) {
-          print(e.farmerId);
           try {
-            var res = await http
-                .post(Uri.parse("$baseUrlConst/$addFarmerConst"), body: {
-              "FarmerName": e.farmerName,
-              "BankName": e.bankName,
-              "BranchName": e.branchName,
-              "AccountName": e.accountName,
-              "IFSCCode": e.ifscCode,
-              "AadharCardNo": e.aadharCardNo,
-              "MobileNumber": e.mobileNumber,
-              "NoOfCows": e.noOfCows.toString(),
-              "NoOfBuffalos": e.noOfBuffalos.toString(),
-              "ModeOfPay": e.modeOfPay.toString(),
-              "RF_ID": "null",
-              "Address": e.address,
-              "ExportParameter1": "0",
-              "ExportParameter2": "0",
-              "ExportParameter3": "0",
-              "CenterID": box.read(centerIdConst),
-              "MCPGroup": "Maklife"
-            });
-            print(jsonDecode(res.body));
+            var res = await http.post(
+              Uri.parse("$baseUrlConst/$addFarmerConst"),
+              body: {
+                "FarmerName": e.farmerName,
+                "BankName": e.bankName,
+                "BranchName": e.branchName,
+                "AccountName": e.accountName,
+                "IFSCCode": e.ifscCode,
+                "AadharCardNo": e.aadharCardNo,
+                "MobileNumber": e.mobileNumber,
+                "NoOfCows": e.noOfCows.toString(),
+                "NoOfBuffalos": e.noOfBuffalos.toString(),
+                "ModeOfPay": e.modeOfPay.toString(),
+                "RF_ID": "null",
+                "Address": e.address,
+                "ExportParameter1": "0",
+                "ExportParameter2": "0",
+                "ExportParameter3": "0",
+                "CenterID": box.read(centerIdConst).toString(),
+                "MCPGroup": "Maklife",
+                // "FUploaded": 1
+              },
+              headers: {
+                "Access-Control-Allow-Origin":
+                    "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials":
+                    "true", // Required for cookies, authorization headers with HTTPS
+                "Access-Control-Allow-Headers":
+                    "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+                "Access-Control-Allow-Methods": "POST, OPTIONS, GET"
+              },
+            );
 
             if (res.statusCode == 200) {
-              print(jsonDecode(res.body));
+              farmerDB.update(
+                farmerId: e.farmerId!,
+                FUploaded: 1,
+              );
             } else {
               //
             }
             // circularProgress = true;
           } catch (e) {
             // apiLopp(i);
-            print(e);
           }
         }
       }
@@ -159,41 +170,97 @@ class PinverifyController extends GetxController {
       for (var e in restoreData) {
         if (e.FUploaded == 0) {
           try {
-            var res = await http
-                .post(Uri.parse("$baseUrlConst/$dailyCollection"), body: {
-              "Collection_Date": e.collectionDate.toString(),
-              "Inserted_Time": e.insertedTime.toString(),
-              "Calculations_ID": "",
-              "FarmerId": e.farmerId.toString(),
-              "Farmer_Name": e.farmerName.toString(),
-              "Collection_Mode": e.collectionMode.toString(),
-              "Scale_Mode": e.scaleMode.toString(),
-              "Analyze_Mode": e.analyzeMode.toString(),
-              "Milk_Status": e.milkStatus.toString(),
-              "Milk_Type": e.milkType.toString(),
-              "Rate_Chart_Name": e.rateChartName.toString(),
-              "Qty": e.qty.toString(),
-              "FAT": e.fat.toString(),
-              "SNF": e.snf.toString(),
-              "Added_Water": e.addedWater.toString(),
-              "Rate_Per_Liter": e.ratePerLiter.toString(),
-              "Total_Amt": e.totalAmt.toString(),
-              "CollectionCenterId": e.collectionCenterId.toString(),
-              "CollectionCenterName": e.collectionCenterName.toString(),
-              "Shift": e.shift.toString(),
-            });
+            var res = await http.post(
+              Uri.parse("$baseUrlConst/$dailyCollection"),
+              body: {
+                "Collection_Date": e.collectionDate.toString(),
+                "Inserted_Time": e.insertedTime.toString(),
+                "Calculations_ID": "",
+                "FarmerId": e.farmerId.toString(),
+                "Farmer_Name": e.farmerName.toString(),
+                "Collection_Mode": e.collectionMode.toString(),
+                "Scale_Mode": e.scaleMode.toString(),
+                "Analyze_Mode": e.analyzeMode.toString(),
+                "Milk_Status": e.milkStatus.toString(),
+                "Milk_Type": e.milkType.toString(),
+                "Rate_Chart_Name": e.rateChartName.toString(),
+                "Qty": e.qty.toString(),
+                "FAT": e.fat.toString(),
+                "SNF": e.snf.toString(),
+                "Added_Water": e.addedWater.toString(),
+                "Rate_Per_Liter": e.ratePerLiter.toString(),
+                "Total_Amt": e.totalAmt.toString(),
+                "CollectionCenterId": e.collectionCenterId.toString(),
+                "CollectionCenterName": e.collectionCenterName.toString(),
+                "Shift": e.shift.toString(),
+              },
+              headers: {
+                "Access-Control-Allow-Origin":
+                    "*", // Required for CORS support to work
+                "Access-Control-Allow-Credentials":
+                    "true", // Required for cookies, authorization headers with HTTPS
+                "Access-Control-Allow-Headers":
+                    "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+                "Access-Control-Allow-Methods": "POST, OPTIONS, GET"
+              },
+            );
 
             if (res.statusCode == 200) {
               await milkCollectionDB.update(
                   farmerId: e.farmerId!, FUploaded: 1);
-              print(jsonDecode(res.body));
             }
-          } catch (e) {
-            print(e);
-          }
+          } catch (e) {}
         }
       }
     }
+  }
+
+  dateFormat(DateTime date) {
+    return DateFormat("dd-MMM-yyyy").format(date);
+  }
+
+  Future<void> geMilkCollectionList() async {
+    try {
+      var res = await http.get(
+          Uri.parse(
+            "$baseUrlConst/$restoreDataConst?CollectionCenterId=${box.read("centerId")}&FromDate=${dateFormat(DateTime.now().subtract(const Duration(days: 90)))}&ToDate=${dateFormat(DateTime.now())}",
+          ),
+          headers: {"Content-Type": "application/json"});
+
+      if (res.statusCode == 200) {
+        restoreData.assignAll([]);
+        restoreData.assignAll(milkCollectionModelFromMap(res.body));
+        if (restoreData.isNotEmpty) {
+          int count = 0;
+
+          milkCollectionDB.deleteTable();
+          for (var e in restoreData) {
+            milkCollectionDB.create(
+              Added_Water: e.addedWater,
+              Analyze_Mode: e.analyzeMode,
+              CollectionCenterId: e.collectionCenterId.toString(),
+              CollectionCenterName: e.collectionCenterName,
+              Collection_Date: e.collectionDate,
+              Collection_Mode: e.collectionMode,
+              FAT: e.fat,
+              FarmerId: e.farmerId,
+              Farmer_Name: e.farmerName,
+              Inserted_Time: e.insertedTime,
+              Milk_Status: e.milkStatus,
+              Milk_Type: e.milkType,
+              Qty: e.qty,
+              Rate_Chart_Name: e.rateChartName,
+              Rate_Per_Liter: e.ratePerLiter,
+              SNF: e.snf,
+              Scale_Mode: e.scaleMode,
+              Shift: e.shift,
+              Total_Amt: e.totalAmt,
+              FUploaded: 1,
+            );
+          }
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> getFarmerList() async {
@@ -207,6 +274,7 @@ class PinverifyController extends GetxController {
         farmerData.assignAll(farmerListModelFromMap(res.body));
 
         if (farmerData.isNotEmpty) {
+          farmerDB.deleteTable();
           for (var e in farmerData) {
             farmerDB.create(
               farmerId: e.farmerId!,
@@ -227,9 +295,9 @@ class PinverifyController extends GetxController {
               noOfBuffalos: e.noOfBuffalos,
               noOfCows: e.noOfCows,
               rFID: e.rfId,
+              FUploaded: 1,
             );
           }
-          print(farmerData);
         }
       } else {
         // Get.toNamed(Routes.HOME);
