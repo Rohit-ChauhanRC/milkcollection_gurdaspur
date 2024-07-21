@@ -738,9 +738,10 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                     if (result) {
                                       await controller.sendCollection();
                                       await controller.checkSmsFlag();
-                                      await controller.homeController
-                                          .fetchMilkCollectionDateWise();
+                                      
                                     }
+                                    await controller.homeController
+                                        .fetchMilkCollectionDateWise();
                                     controller.emptyData();
                                     controller.progress = false;
                                   }

@@ -756,7 +756,7 @@ class HomeController extends GetxController {
     required String density,
   }) async {
     printSummaryData =
-        "***Maklife Producer Company Ltd***\n\nDate  :  ${DateFormat("dd-MMM-yyyy").format(DateTime.now())}\nTime  :  $shift\nFarmerName    :     $farmerName\nFarmer Id     :     $getFarmerId\nFat           :     $fat1\nSnf           :     $snf1\nDensity       :     $density\nMilk Type     :     $milkType\nWeight        :     $quantity1\nPrice         :     $price\nAmount        :     $totalAmount\n          \n                      \n          \n       \n               \n           \n";
+        "***Maklife Producer Company Ltd***\n\nDate  :  ${DateFormat("dd-MMM-yyyy").format(DateTime.now())}\nTime  :  $shift\nFarmerName    :     $farmerName\nFarmer Id     :     $getFarmerId\nFat           :     $fat1\nSnf           :     $snf1\nDensity       :     ${density ?? 0.0}\nMilk Type     :     $milkType\nWeight        :     $quantity1\nPrice         :     $price\nAmount        :     $totalAmount\n          \n                      \n          \n       \n               \n           \n";
     printStatus = true;
     // homeController.socket!.write("collectionPrint");
   }
@@ -797,7 +797,7 @@ class HomeController extends GetxController {
         totalSnf +=
             milkCollectionData[i].snf!.toDouble() * milkCollectionData[i].qty!;
         totalWater += milkCollectionData[i].addedWater!.toDouble();
-        totalDensity += milkCollectionData[i].density!.toDouble();
+        totalDensity += (milkCollectionData[i].density ?? 0.0).toDouble();
         totalPrice += milkCollectionData[i].ratePerLiter!.toDouble();
         totalAmt += milkCollectionData[i].totalAmt!.toDouble();
         // farmerPrintD.add(
@@ -812,7 +812,7 @@ class HomeController extends GetxController {
           totalWaterCow += milkCollectionData[i].addedWater!.toDouble();
           totalPriceCow += milkCollectionData[i].ratePerLiter!;
           totalAmtCow += milkCollectionData[i].totalAmt!;
-          totalDensityCow += milkCollectionData[i].density!.toDouble();
+          totalDensityCow += (milkCollectionData[i].density ?? 0.0).toDouble();
         }
         if (milkCollectionData[i].milkType == "BM") {
           totalQtyBuffallo += 1;
@@ -824,7 +824,8 @@ class HomeController extends GetxController {
           totalWaterBuffallo += milkCollectionData[i].addedWater!.toDouble();
           totalPriceBuffallo += milkCollectionData[i].ratePerLiter!.toDouble();
           totalAmtBuffallo += milkCollectionData[i].totalAmt!.toDouble();
-          totalDensityBuffallo += milkCollectionData[i].density!.toDouble();
+          totalDensityBuffallo +=
+              (milkCollectionData[i].density ?? 0.0).toDouble();
         }
       }
     }
@@ -852,7 +853,7 @@ Shift        :   ${radio == 1 ? "Am" : "Pm"}
 Total qty..........$totalMilkCow
 Avg Fat............${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
-Avg Density........${totalQtyCow > 0 ? (totalDensityCow / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
+Avg Density........${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
 Avg Rate...........${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
 Total Amt..........${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
         
@@ -861,14 +862,14 @@ Total qty..........$totalMilkBuffallo
 Avg Fat............${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Rate...........${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
-Avg Density........${totalQtyBuffallo > 0 ? (totalDensityBuffallo / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
+Avg Density........${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
 Total Amt..........${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
 
     Total milk
 Total qty..........${totalMilkBuffallo + totalMilkCow}
 Avg Fat............${totalMilk > 0 ? (totalFat / totalMilk).toPrecision(2) : 0.0}
 Avg Snf............${totalMilk > 0 ? (totalSnf / totalMilk).toPrecision(2) : 0.0}
-Avg Density........${totalMilk > 0 ? (totalDensity / totalQty).toPrecision(2) : 0.0}
+Avg Density........${totalMilk > 0 ? ((totalDensity ?? 0.0) / totalQty).toPrecision(2) : 0.0}
 Avg Rate...........${totalQty > 0 ? (totalPrice / totalQty.toDouble()).toPrecision(2) : 0.0}
 Total Amt..........${totalQty > 0 ? totalAmt.toPrecision(2) : 0.0}
 --------------------------------
@@ -1019,7 +1020,7 @@ Shift        :   ${radio == 1 ? "Am" : "Pm"}
 Total qty..........$totalMilkCow
 Avg Fat............${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
-Avg Density........${totalQtyCow > 0 ? (totalDensityCow / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
+Avg Density........${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
 Avg Rate...........${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow).toPrecision(2) : 0.0}
 Total Amt..........${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
         
@@ -1027,7 +1028,7 @@ Total Amt..........${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
 Total qty..........$totalMilkBuffallo
 Avg Fat............${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
-Avg Density........${totalQtyBuffallo > 0 ? (totalDensityBuffallo / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
+Avg Density........${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
 Avg Rate...........${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
 Total Amt..........${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
 
@@ -1035,7 +1036,7 @@ Total Amt..........${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.
 Total qty..........${totalMilkBuffallo + totalMilkCow}
 Avg Fat............${totalMilk > 0 ? (totalFat / totalMilk).toPrecision(2) : 0.0}
 Avg Snf............${totalMilk > 0 ? (totalSnf / totalMilk).toPrecision(2) : 0.0}
-Avg Density........${totalMilk > 0 ? (totalDensity / totalQty).toPrecision(2) : 0.0}
+Avg Density........${totalMilk > 0 ? ((totalDensity ?? 0.0) / totalQty).toPrecision(2) : 0.0}
 Avg Rate...........${totalQty > 0 ? (totalPrice / totalQty.toDouble()).toPrecision(2) : 0.0}
 Total Amt..........${totalQty > 0 ? totalAmt.toPrecision(2) : 0.0}
 
@@ -1111,14 +1112,14 @@ CM
 Total qty   : $totalMilkCow
 Avg Fat     : ${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Snf     : ${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
-Avg Dnsty   : ${totalQtyCow > 0 ? (totalDensityCow / totalMilkCow).toPrecision(2) : 0.0}
+Avg Dnsty   : ${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalMilkCow).toPrecision(2) : 0.0}
 Avg Rate    : ${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow).toPrecision(2) : 0.0}
 Total Amt   : ${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
 BM
 Total qty   : $totalMilkBuffallo
 Avg Fat     : ${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Snf     : ${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
-Avg Dnsty   : ${totalQtyBuffallo > 0 ? (totalDensityBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
+Avg Dnsty   : ${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Rate    : ${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo).toPrecision(2) : 0.0}
 Total Amt   : ${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
 Total Ltrs  : ${totalMilkCow + totalMilkBuffallo}

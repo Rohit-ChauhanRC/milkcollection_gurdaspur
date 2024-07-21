@@ -476,16 +476,35 @@ class CollectmilkController extends GetxController {
 
   String getFarmerIdFinal() {
     var farmerfinalId = "";
-    if (farmerId.length == 1) {
-      farmerfinalId = "${box.read(centerIdConst)}000$farmerId";
-    } else if (farmerId.length == 2) {
-      farmerfinalId = "${box.read(centerIdConst)}00$farmerId";
-    } else if (farmerId.length == 3) {
-      farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
-    } else if (farmerId.length == 4) {
-      farmerfinalId = box.read(centerIdConst).toString() + farmerId;
-      // }
+    if ((box.read(centerIdConst).toString()).length == 1) {
+      if (farmerId.length == 1) {
+        farmerfinalId = "${box.read(centerIdConst)}000$farmerId";
+      } else if (farmerId.length == 2) {
+        farmerfinalId = "${box.read(centerIdConst)}00$farmerId";
+      } else if (farmerId.length == 3) {
+        farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
+      } else if (farmerId.length == 4) {
+        farmerfinalId = box.read(centerIdConst).toString() + farmerId;
+        // }
+      }
+    } else if ((box.read(centerIdConst).toString()).length > 1 &&
+        (box.read(centerIdConst).toString()).length < 3) {
+      if (farmerId.length == 1) {
+        farmerfinalId = "${box.read(centerIdConst)}00$farmerId";
+      } else if (farmerId.length == 2) {
+        farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
+      } else if (farmerId.length == 3) {
+        farmerfinalId = "${box.read(centerIdConst)}$farmerId";
+      }
+    } else if ((box.read(centerIdConst).toString()).length > 2 &&
+        (box.read(centerIdConst).toString()).length < 4) {
+      if (farmerId.length == 1) {
+        farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
+      } else if (farmerId.length == 2) {
+        farmerfinalId = "${box.read(centerIdConst)}$farmerId";
+      }
     }
+
     return farmerfinalId;
     // farmerData =
     //     await pinverifyController.farmerDB.fetchById(farmerfinalId.toString());

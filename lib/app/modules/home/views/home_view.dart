@@ -442,8 +442,8 @@ class HomeView extends GetView<HomeController> {
             children: [
               InkWell(
                 onTap: () async {
-                  await controller.getRateChartBM("B");
-                  await controller.getRateChartCM("C");
+                  // await controller.getRateChartBM("B");
+                  // await controller.getRateChartCM("C");
                   Get.toNamed(
                     Routes.COLLECTMILK,
                   );
