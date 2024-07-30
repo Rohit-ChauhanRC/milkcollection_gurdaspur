@@ -604,9 +604,9 @@ class HomeController extends GetxController {
       (Uint8List data) {
         final message = String.fromCharCodes(data);
 
-        if (kDebugMode) {
-          print("analyser: $message");
-        }
+        // if (kDebugMode) {
+        print("analyser: $message");
+        // }
 
         final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
 
@@ -617,10 +617,10 @@ class HomeController extends GetxController {
                 .toString()
                 .length <
             6) {
-          if (kDebugMode) {
-            print(
-                "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
-          }
+          // if (kDebugMode) {
+          print(
+              "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
+          // }
         } else if (message
                 .split(" ")[1]
                 .replaceAll("Hex", "")
@@ -628,25 +628,26 @@ class HomeController extends GetxController {
                 .toString()
                 .length >
             6) {
-          if (alphanumeric.hasMatch(message
-              .split(" ")[1]
-              .replaceAll("Hex", "")
-              .replaceAll("@", ""))) {
-            if (kDebugMode) {
-              print(
-                  "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
-            }
-          } else {
-            fat =
-                "${message.split(" ")[1].split("@")[1]}.${message.split(" ")[1].split("@")[2]}";
-            snf =
-                "${message.split(" ")[1].split("@")[3]}.${message.split(" ")[1].split("@")[4]}";
+          // if (alphanumeric.hasMatch(message
+          //         .split(" ")[1]
+          //         .replaceAll("Hex", "")
+          //         .replaceAll("@", "")) ==
+          //     true) {
+          //   // if (kDebugMode) {
+          //   print(
+          //       "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
+          //   // }
+          // } else {
+          fat =
+              "${message.split(" ")[1].split("@")[1]}.${message.split(" ")[1].split("@")[2]}";
+          snf =
+              "${message.split(" ")[1].split("@")[3]}.${message.split(" ")[1].split("@")[4]}";
 
-            density =
-                "${message.split(" ")[1].split("@")[5]}.${message.split(" ")[1].split("@")[6]}";
-            water =
-                "${message.split(" ")[1].split("@")[7]}.${message.split(" ")[1].split("@")[8]}";
-          }
+          density =
+              "${message.split(" ")[1].split("@")[5]}.${message.split(" ")[1].split("@")[6]}";
+          water =
+              "${message.split(" ")[1].split("@")[7]}.${message.split(" ")[1].split("@")[8]}";
+          // }
         }
 
         update();
