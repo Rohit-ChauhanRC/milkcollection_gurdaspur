@@ -475,7 +475,13 @@ class FarmerView extends GetView<FarmerController> {
                       CustomButton(
                         onPressed: () async {
                           if (controller.type) {
-                            controller.localFarmerUpdate();
+                            bool result =
+                                await InternetConnection().hasInternetAccess;
+                            if (result) {
+                              controller.localFarmerUpdate(true);
+                            } else {
+                              controller.localFarmerUpdate(false);
+                            }
                           } else {
                             bool result =
                                 await InternetConnection().hasInternetAccess;

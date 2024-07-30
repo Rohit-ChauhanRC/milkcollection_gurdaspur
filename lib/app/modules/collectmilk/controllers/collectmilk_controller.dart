@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -155,6 +156,10 @@ class CollectmilkController extends GetxController {
   final RxBool _circularProgress = true.obs;
   bool get circularProgress => _circularProgress.value;
   set circularProgress(bool v) => _circularProgress.value = v;
+
+  final RxString _fromDate = "${DateTime.now()}".obs;
+  String get fromDate => _fromDate.value;
+  set fromDate(String str) => _fromDate.value = str;
 
   @override
   void onInit() async {
@@ -524,6 +529,8 @@ class CollectmilkController extends GetxController {
         pinManual.assignAll(pinnmanualModelFromMap(res.body));
         if (pinManual.isNotEmpty) {
           if (pinManual[0].pin == int.parse(pin)) {
+            box.write(manualpinConst,
+                DateFormat("yyyy-mm-dd").format(DateTime.now()).toString());
             check = false;
             Utils.closeDialog();
             showDialogSelectShift();
@@ -535,7 +542,7 @@ class CollectmilkController extends GetxController {
         Utils.showSnackbar("Pin Expired Of Your Collection Centre!");
       }
     } catch (e) {
-      Utils.showSnackbar("Pin Expired Of Your Collection Centre!");
+      // Utils.showSnackbar("Pin Expired Of Your Collection Centre!");
     }
   }
 
@@ -616,19 +623,51 @@ class CollectmilkController extends GetxController {
           margin: const EdgeInsets.all(10),
           child: Row(
             children: [
-              const Icon(
-                Icons.calendar_month_outlined,
-                color: AppColors.darkBrown,
+              InkWell(
+                onTap: () {
+                  showDatePicker(
+                    context: Get.context!,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(const Duration(days: 7)),
+                    lastDate: DateTime(2101),
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                  ).then((selectedDate) async {
+                    fromDate = selectedDate!.toIso8601String();
+                    if (kDebugMode) {
+                      print(fromDate);
+                    }
+                  });
+                },
+                child: const Icon(
+                  Icons.calendar_month_outlined,
+                  color: AppColors.darkBrown,
+                ),
               ),
-              Text(
-                "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
-                style: Theme.of(Get.context!).textTheme.displaySmall,
+              InkWell(
+                onTap: () {
+                  showDatePicker(
+                    context: Get.context!,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(const Duration(days: 7)),
+                    lastDate: DateTime(2101),
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                  ).then((selectedDate) async {
+                    fromDate = selectedDate!.toIso8601String();
+                    if (kDebugMode) {
+                      print(fromDate);
+                    }
+                  });
+                },
+                child: Text(
+                  DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate)),
+                  style: Theme.of(Get.context!).textTheme.displaySmall,
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Obx(() => SizedBox(
-                        width: Get.width * 0.16,
+                        width: Get.width * 0.14,
                         child: Radio(
                           activeColor: AppColors.yellow,
                           value: "AM",
@@ -655,7 +694,7 @@ class CollectmilkController extends GetxController {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Obx(() => SizedBox(
-                        width: Get.width * 0.16,
+                        width: Get.width * 0.14,
                         child: Radio(
                           activeColor: AppColors.yellow,
                           value: "PM",

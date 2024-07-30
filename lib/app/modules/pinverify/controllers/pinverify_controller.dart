@@ -117,11 +117,14 @@ class PinverifyController extends GetxController {
             var res = await http.post(
               Uri.parse("$baseUrlConst/$addFarmerConst"),
               body: {
+                // "FarmerID": e.farmerId.toString(),
+                // "F_ID": e.farmerId.toString(),
+                "CalculationsID": e.calculationsId.toString(),
                 "FarmerName": e.farmerName,
-                "BankName": e.bankName,
-                "BranchName": e.branchName,
-                "AccountName": e.accountName,
-                "IFSCCode": e.ifscCode,
+                "BankName": e.bankName!.isNotEmpty ? e.bankName : "NA",
+                "BranchName": e.branchName!.isNotEmpty ? e.branchName : "NA",
+                "AccountName": e.accountName!.isNotEmpty ? e.accountName : "NA",
+                "IFSCCode": e.ifscCode!.isNotEmpty ? e.ifscCode : "NA",
                 "AadharCardNo": e.aadharCardNo,
                 "MobileNumber": e.mobileNumber,
                 "NoOfCows": e.noOfCows.toString(),
@@ -148,10 +151,6 @@ class PinverifyController extends GetxController {
             );
 
             if (res.statusCode == 200) {
-              farmerDB.update(
-                farmerId: e.farmerId!,
-                FUploaded: 1,
-              );
             } else {
               //
             }
@@ -193,6 +192,7 @@ class PinverifyController extends GetxController {
                 "CollectionCenterId": e.collectionCenterId.toString(),
                 "CollectionCenterName": e.collectionCenterName.toString(),
                 "Shift": e.shift.toString(),
+                "Density": e.density.toString()
               },
               headers: {
                 "Access-Control-Allow-Origin":
@@ -256,6 +256,7 @@ class PinverifyController extends GetxController {
               Shift: e.shift,
               Total_Amt: e.totalAmt,
               FUploaded: 1,
+              density: e.density,
             );
           }
         }

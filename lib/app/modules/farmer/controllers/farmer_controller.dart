@@ -183,14 +183,15 @@ class FarmerController extends GetxController {
 
   Future<void> addFarmer() async {
     try {
-      var res =
-          await http.post(Uri.parse("$baseUrlConst/$addFarmerConst"), body: {
-        "CalculationsID": getFarmerIdFinal(),
+      final _body = <String, String>{
+        "CalculationsID": getFarmerIdFinal().toString(),
+        // "FarmerID": getFarmerIdFinal(),
+        // "F_ID": getFarmerIdFinal(),
         "FarmerName": farmerName,
-        "BankName": bankName.isNotEmpty ? bankName : "null",
-        "BranchName": branchName.isNotEmpty ? branchName : "null",
-        "AccountName": accountNumber.isNotEmpty ? accountNumber : "null",
-        "IFSCCode": ifscCode.isNotEmpty ? ifscCode : "null",
+        "BankName": bankName.isNotEmpty ? bankName : "NA",
+        "BranchName": branchName.isNotEmpty ? branchName : "NA",
+        "AccountName": accountNumber.isNotEmpty ? accountNumber : "NA",
+        "IFSCCode": ifscCode.isNotEmpty ? ifscCode : "NA",
         "AadharCardNo": aadharCard,
         "MobileNumber": mobileNumber,
         "NoOfCows": numberOfCows,
@@ -202,9 +203,12 @@ class FarmerController extends GetxController {
         "ExportParameter2": "0",
         "ExportParameter3": "0",
         "CenterID": box.read("centerId").toString(),
-        "MCPGroup": "Maklife"
-      });
+        "MCPGroup": "Maklife",
+      };
+      var res = await http.post(Uri.parse("$baseUrlConst/$addFarmerConst"),
+          body: _body);
       print(jsonDecode(res.body));
+      print(_body);
 
       if (res.statusCode == 200 && jsonDecode(res.body) == "Added succes..") {
         Utils.showSnackbar("Add Successfully!");
@@ -215,10 +219,6 @@ class FarmerController extends GetxController {
       print(e);
       circularProgress = true;
     }
-
-    // await farmerlistController.getFarmerListLocal().then((v) {
-    //   Get.back();
-    // });
   }
 
   Future<void> createFarmerLocal(int fupload) async {
@@ -245,7 +245,7 @@ class FarmerController extends GetxController {
     );
   }
 
-  Future<void> localFarmerUpdate() async {
+  Future<void> localFarmerUpdate(bool result) async {
     await farmerDB
         .update(
             farmerId: Get.arguments[1],
@@ -256,8 +256,59 @@ class FarmerController extends GetxController {
             noOfCows: int.parse(numberOfCows),
             modeOfPay: radio)
         .then((value) {
-      Utils.showSnackbar("Farmer details saved..");
-      Get.back();
+      Utils.showSnackbar("Farmer details updated..");
+      // Get.back();
     });
+    if (result) {
+      Get.back();
+      await updateFarmerApi().then((onValue) => Get.back());
+    } else {
+      Get.back();
+    }
+  }
+
+  Future<void> updateFarmerApi() async {
+    try {
+      var res = await http.post(
+        Uri.parse("$baseUrlConst/$updateFarmerDetailsConst"),
+        body: {
+          "CalculationsID": Get.arguments[1].toString(),
+          "FarmerName": farmerName,
+          "BankName": bankName.isNotEmpty ? bankName : "null",
+          "BranchName": branchName.isNotEmpty ? branchName : "null",
+          "AccountName": accountNumber.isNotEmpty ? accountNumber : "null",
+          "IFSCCode": ifscCode.isNotEmpty ? ifscCode : "null",
+          "AadharCardNo": aadharCard,
+          "MobileNumber": mobileNumber,
+          "NoOfCows": numberOfCows,
+          "NoOfBuffalos": numberOfBuffalo,
+          "ModeOfPay": radio.toString(),
+          "RF_ID": "null",
+          "Address": address,
+          "ExportParameter1": "0",
+          "ExportParameter2": "0",
+          "ExportParameter3": "0",
+          "CenterID": box.read("centerId").toString(),
+          "MCPGroup": "Maklife"
+        },
+        headers: {
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Credentials":
+              "true", // Required for cookies, authorization headers with HTTPS
+          "Access-Control-Allow-Headers":
+              "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+          "Access-Control-Allow-Methods": "POST, OPTIONS, GET"
+        },
+      );
+      print(jsonDecode(res.body));
+
+      if (res.statusCode == 200) {}
+      circularProgress = true;
+    } catch (e) {
+      // apiLopp(i);
+      print(e);
+      circularProgress = true;
+    }
   }
 }

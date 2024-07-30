@@ -29,7 +29,7 @@ class PinverifyView extends GetView<PinverifyController> {
                   width: 200.w,
                   margin: EdgeInsets.only(top: 100.h),
                   child: Image.asset(
-                    "assets/images/logo.png",
+                    "assets/images/logo_mk.png",
                     fit: BoxFit.fill,
                     // height: Get.height * 0.5,
                     alignment: Alignment.topCenter,

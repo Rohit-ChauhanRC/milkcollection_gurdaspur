@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:intl/intl.dart';
+import 'package:milkcollection/app/constants/contants.dart';
 import 'package:milkcollection/app/theme/app_colors.dart';
 import 'package:milkcollection/app/utils/utils.dart';
 import 'package:milkcollection/app/widgets/backdround_container.dart';
@@ -53,13 +55,21 @@ class CollectmilkView extends GetView<CollectmilkController> {
                 }
               } else if (i == "Manual Collection") {
                 controller.pin = "";
-                controller.showDialogManualPin(
-                  initialValue: controller.pin,
-                  onTap: () async {
-                    await controller.getVerifyPin();
-                  },
-                );
-                // await controller.getVerifyPin();
+
+                if (controller.box.read(manualpinConst) ==
+                    DateFormat("yyyy-mm-dd")
+                        .format(DateTime.now())
+                        .toString()) {
+                  controller.check = false;
+                } else {
+                  controller.showDialogManualPin(
+                    initialValue: controller.pin,
+                    onTap: () async {
+                      await controller.getVerifyPin();
+                    },
+                  );
+                  // await controller.getVerifyPin();
+                }
               } else {
                 await controller.exportExcel();
               }
@@ -294,7 +304,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                               width: Get.width * .3,
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                "${controller.homeController.fat.isNotEmpty ? double.tryParse(controller.homeController.fat)!.toPrecision(1) : ""}",
+                                "${controller.homeController.fat.isNotEmpty ? double.tryParse(controller.homeController.fat)?.toPrecision(1) ?? "" : ""}",
                                 style: Theme.of(context).textTheme.labelMedium,
                                 textAlign: TextAlign.center,
                               ),
@@ -342,7 +352,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                               width: Get.width * .3,
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                "${controller.homeController.snf.isNotEmpty ? double.tryParse(controller.homeController.snf)!.toPrecision(1) : ""}",
+                                "${controller.homeController.snf.isNotEmpty ? double.tryParse(controller.homeController.snf)?.toPrecision(1) ?? "" : ""}",
                                 style: Theme.of(context).textTheme.labelMedium,
                                 textAlign: TextAlign.center,
                               ),
@@ -390,7 +400,9 @@ class CollectmilkView extends GetView<CollectmilkController> {
                               width: Get.width * .3,
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                controller.homeController.water,
+                                controller.homeController.water.isNotEmpty
+                                    ? controller.homeController.water ?? ""
+                                    : "",
                                 style: Theme.of(context).textTheme.labelMedium,
                                 textAlign: TextAlign.center,
                               ),
@@ -442,7 +454,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                       width: Get.width * .3,
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        "${controller.homeController.fat.isNotEmpty ? double.tryParse(controller.homeController.density)!.toPrecision(1) : ""}",
+                        "${controller.homeController.fat.isNotEmpty ? double.tryParse(controller.homeController.density)!.toPrecision(1) ?? "" : ""}",
                         style: Theme.of(context).textTheme.labelMedium,
                         textAlign: TextAlign.center,
                       ),
@@ -493,7 +505,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                               padding: const EdgeInsets.all(10),
                               child: Text(
                                 controller.homeController.fat.isNotEmpty
-                                    ? controller.homeController.quantity
+                                    ? controller.homeController.quantity ?? ""
                                     : "",
                                 style: Theme.of(context).textTheme.labelMedium,
                                 textAlign: TextAlign.center,
@@ -552,7 +564,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                               .homeController.snf.isNotEmpty &&
                                           (controller.radio == 1 ||
                                               controller.radio == 0)
-                                      ? controller.getPriceData()
+                                      ? controller.getPriceData() ?? ""
                                       : "",
                                   style:
                                       Theme.of(context).textTheme.labelMedium,
@@ -575,7 +587,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                           controller.snfDC.isNotEmpty &&
                                           (controller.radio == 1 ||
                                               controller.radio == 0)
-                                      ? controller.getPriceData()
+                                      ? controller.getPriceData() ?? ""
                                       : "",
                                   style:
                                       Theme.of(context).textTheme.labelMedium,
@@ -670,12 +682,12 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                       controller.progress = true;
                                       await controller.accept();
                                       await controller.printData();
+                                      await controller.homeController
+                                          .fetchMilkCollectionDateWise();
                                       if (result) {
                                         await controller.sendCollection();
                                         await controller.checkSmsFlag();
                                       }
-                                      await controller.homeController
-                                          .fetchMilkCollectionDateWise();
 
                                       controller.emptyData();
                                       controller.progress = false;
@@ -738,7 +750,6 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                     if (result) {
                                       await controller.sendCollection();
                                       await controller.checkSmsFlag();
-                                      
                                     }
                                     await controller.homeController
                                         .fetchMilkCollectionDateWise();

@@ -278,24 +278,20 @@ class HomeController extends GetxController {
     } else {
       radio = 2;
     }
-    // if (box.read(
-    //       centerName,
-    //     ) !=
-    //     "admin") {
+
     await getRateChartBM("B");
     await getRateChartCM("C");
     if (Platform.isIOS) {
       await getNetworkType();
     }
-    await checkIp();
-
-    await fetchMilkCollectionDateWise();
-    // }
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+    await checkIp();
+
+    // await fetchMilkCollectionDateWise();
   }
 
   @override
@@ -331,28 +327,10 @@ class HomeController extends GetxController {
     // printSummary = true;
   }
 
-  Future entryPoint(SendPort sendPort) async {
-    // sendPort.send(response);
-  }
-
-  void ccConvert() {
-    // var lst = [2402, 8100, 7652, "c722", "7cc5", "6ff4", "30b7", "8ebb"];
-    // lst[6].toString().substring(0, 1);
-    // var li = ["fc", "cc", "a9", "e1"];
-    // Convert convert = Convert();
-    // final abc = convert.hexToDecimal(hexString: li);
-    // print(abc);
-    // RawServerSocket.bind(address, port);
-  }
-
   Future<void> getRateChartBM(
     String milkType,
   ) async {
     try {
-      if (kDebugMode) {
-        print(
-            "http://Payment.maklife.in:9021/api/GetRateChart?CollectionCenterId=${box.read(centerIdConst)}&MilkType=$milkType");
-      }
       var res = await http.get(
         Uri.parse(
             "http://Payment.maklife.in:9021/api/GetRateChart?CollectionCenterId=${box.read(centerIdConst)}&MilkType=$milkType"),
@@ -441,7 +419,6 @@ class HomeController extends GetxController {
         rateChartData.assignAll([]);
       }
     } catch (e) {
-      print(e.toString());
       rateChartData.assignAll([]);
     }
   }
@@ -535,34 +512,6 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> Santram(String ip) async {
-    try {
-      Socket socket = await Socket.connect(ip, 23);
-
-      // Handle socket communication
-      socket.write('Hello from Flutter');
-
-      socket.listen(
-        (Uint8List data) {
-          if (ipvCheck) {
-            socket.write(1234);
-          }
-          ipvCheck = false;
-          socket.write(1234);
-        },
-        onError: (error) {
-          // socket.destroy();
-        },
-        onDone: () {
-          // socket.destroy();
-        },
-      );
-
-      // Close the socket
-      // socket.close();
-    } catch (e) {}
-  }
-
   Future<void> checkIp() async {
     await Permission.locationWhenInUse.request();
     // await Permission.sms.request();
@@ -570,11 +519,18 @@ class HomeController extends GetxController {
     for (var interface in await NetworkInterface.list()) {
       for (var addr in interface.addresses) {
         if (addr.type == InternetAddressType.IPv4 &&
-            addr.address.startsWith('192') &&
-            (interface.name.startsWith("swlan") ||
-                interface.name.startsWith("ap") ||
-                interface.name.startsWith("'en0'"))) {
+            (addr.address.startsWith('192') ||
+                addr.address.startsWith('10') ||
+                addr.address.startsWith('172'))) {
           ip = addr.address.split(".").getRange(0, 3).join(".");
+
+          /*
+          (interface.name.startsWith("swlan") ||
+                interface.name.startsWith("ap") ||
+                interface.name.startsWith("'en0'") ||
+                interface.name.startsWith("wlan0") ||
+                interface.name.startsWith("ccmni0")
+           */
 
           for (var i = 0; i < 255; i++) {
             anaylzerConnection("$ip.$i");
@@ -597,12 +553,6 @@ class HomeController extends GetxController {
 
               printerConnection("$ip.$i");
             }
-            // print("addr.address: ${interface.addresses[0].address}");
-            // printerConnection(interface.addresses[0].address);
-            // anaylzerConnection(interface.addresses[0].address);
-
-            // weighingConnection(interface.addresses[0].address);
-            // print("printer ip6 :$ip");
           }
         }
       }
@@ -654,19 +604,49 @@ class HomeController extends GetxController {
       (Uint8List data) {
         final message = String.fromCharCodes(data);
 
-        // if(message.split(" "))
+        if (kDebugMode) {
+          print("analyser: $message");
+        }
 
-        if (message.split(" ")[1].split("@").length < 4) {
-        } else {
-          fat =
-              "${message.split(" ")[1].split("@")[1]}.${message.split(" ")[1].split("@")[2]}";
-          snf =
-              "${message.split(" ")[1].split("@")[3]}.${message.split(" ")[1].split("@")[4]}";
+        final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
 
-          density =
-              "${message.split(" ")[1].split("@")[5]}.${message.split(" ")[1].split("@")[6]}";
-          water =
-              "${message.split(" ")[1].split("@")[7]}.${message.split(" ")[1].split("@")[8]}";
+        if (message
+                .split(" ")[1]
+                .replaceAll("Hex", "")
+                .replaceAll("@", "")
+                .toString()
+                .length <
+            6) {
+          if (kDebugMode) {
+            print(
+                "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
+          }
+        } else if (message
+                .split(" ")[1]
+                .replaceAll("Hex", "")
+                .replaceAll("@", "")
+                .toString()
+                .length >
+            6) {
+          if (alphanumeric.hasMatch(message
+              .split(" ")[1]
+              .replaceAll("Hex", "")
+              .replaceAll("@", ""))) {
+            if (kDebugMode) {
+              print(
+                  "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
+            }
+          } else {
+            fat =
+                "${message.split(" ")[1].split("@")[1]}.${message.split(" ")[1].split("@")[2]}";
+            snf =
+                "${message.split(" ")[1].split("@")[3]}.${message.split(" ")[1].split("@")[4]}";
+
+            density =
+                "${message.split(" ")[1].split("@")[5]}.${message.split(" ")[1].split("@")[6]}";
+            water =
+                "${message.split(" ")[1].split("@")[7]}.${message.split(" ")[1].split("@")[8]}";
+          }
         }
 
         update();
@@ -684,18 +664,13 @@ class HomeController extends GetxController {
     client.listen(
       (Uint8List data) {
         ipvCheck = true;
+        final message = String.fromCharCodes(data);
 
-        // client.write("Santram");
-        // client.write('\n');
-        // client.write("Santram");
-        // client.write(1234);
-        // client.write("Pulkit\n");
-
-        // GET Hex@2@7@4@2@8@6@1@6@@
-        // client.write("pulkit");
+        if (kDebugMode) {
+          print("printer :$message");
+        }
 
         if (printStatus) {
-          // client.write("printSummaryData");
           client.write(printSummaryData);
           printStatus = false;
         }
@@ -730,6 +705,13 @@ class HomeController extends GetxController {
     client.listen(
       (Uint8List data) {
         final message = String.fromCharCodes(data);
+
+        if (kDebugMode) {
+          print("weight :$message");
+        }
+        if (kDebugMode) {
+          print(message);
+        }
 
         quantity = message.replaceAll("N", "").toString().replaceAll("n", "");
         // collectmilkController.quantity = message.replaceAll("N", "");
@@ -840,7 +822,7 @@ class HomeController extends GetxController {
 
     for (var i = 0; i < milkCollectionData.length; i++) {
       farmDet +=
-          "${milkCollectionData[i].farmerId.toString().substring(milkCollectionData[i].farmerId.toString().length - 3, milkCollectionData[i].farmerId.toString().length)} ${milkCollectionData[i].milkType!.replaceAll("M", "")} ${milkCollectionData[i].qty} ${milkCollectionData[i].fat} ${milkCollectionData[i].snf} ${milkCollectionData[i].ratePerLiter} ${milkCollectionData[i].totalAmt!.toPrecision(1)}\n";
+          "${milkCollectionData[i].farmerId.toString().substring(milkCollectionData[i].farmerId.toString().length - 3, milkCollectionData[i].farmerId.toString().length)} ${milkCollectionData[i].milkType!.replaceAll("M", "")} ${milkCollectionData[i].qty} ${milkCollectionData[i].fat} ${milkCollectionData[i].snf} ${milkCollectionData[i].density ?? 0.0} ${milkCollectionData[i].ratePerLiter} ${milkCollectionData[i].totalAmt!.toPrecision(1)}\n";
     }
 
     var prin = """
@@ -873,7 +855,7 @@ Avg Density........${totalMilk > 0 ? ((totalDensity ?? 0.0) / totalQty).toPrecis
 Avg Rate...........${totalQty > 0 ? (totalPrice / totalQty.toDouble()).toPrecision(2) : 0.0}
 Total Amt..........${totalQty > 0 ? totalAmt.toPrecision(2) : 0.0}
 --------------------------------
-Pro Milk Qty FAT SNF DENSITY Rate Amnt
+Pro Milk Qty FAT SNF DY Rte Amt
 --------------------------------
 $farmDet
 Cow Cans       ${cowCans.isNotEmpty ? cowCans : "0"}
@@ -1063,7 +1045,7 @@ Total cans     ${int.parse("${cowCans.isNotEmpty ? cowCans : 0}") + int.parse("$
       //     .assignAll(centerMobileSmsModelFromMap(jsonDecode(res.body)));
       final ctx = centerMobileSmsModelFromMap(res.body);
       if (ctx.isNotEmpty) {
-        sendMessage1(ctx.first.mobile1.toString(), ctx.first.mobile2.toString(),
+        sendMessage(ctx.first.mobile1.toString(), ctx.first.mobile2.toString(),
             ctx.first.mobile3.toString());
       }
     }
@@ -1089,9 +1071,7 @@ Total cans     ${int.parse("${cowCans.isNotEmpty ? cowCans : 0}") + int.parse("$
         if (res.statusCode == 200) {
           Utils.showSnackbar(jsonDecode(res.body)["message"]);
         } else {}
-      } catch (e) {
-        print(e.toString());
-      }
+      } catch (e) {}
     }
   }
 
@@ -1108,6 +1088,7 @@ Centre ID : ${box.read(centerIdConst)}
 (${box.read(centerName)})
 Date        : ${DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate))}
 Shift       : ${radio == 1 ? "Am" : "Pm"}
+- - -  - - - - - - - - - - -
 CM
 Total qty   : $totalMilkCow
 Avg Fat     : ${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
@@ -1115,6 +1096,7 @@ Avg Snf     : ${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 
 Avg Dnsty   : ${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalMilkCow).toPrecision(2) : 0.0}
 Avg Rate    : ${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow).toPrecision(2) : 0.0}
 Total Amt   : ${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
+- - - - - - - - - - - - - -
 BM
 Total qty   : $totalMilkBuffallo
 Avg Fat     : ${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
@@ -1122,6 +1104,7 @@ Avg Snf     : ${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).to
 Avg Dnsty   : ${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Rate    : ${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo).toPrecision(2) : 0.0}
 Total Amt   : ${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
+- - - - - - - - - - -
 Total Ltrs  : ${totalMilkCow + totalMilkBuffallo}
 Total Amt   : ${(totalAmtCow + totalAmtBuffallo).toPrecision(2)}
 """;
@@ -1214,19 +1197,4 @@ Total Amount   : $totalAmt
     printPaymentDetails = true;
     // return prin;
   }
-}
-
-class SimpleWifiInfo {
-  static const platform =
-      MethodChannel('eng.smaho.com/esptouch_plugin/example');
-
-  /// Get WiFi SSID using platform channels.
-  ///
-  /// Can return null if BSSID information is not available.
-  static Future<String?> get ssid => platform.invokeMethod('ssid');
-
-  /// Get WiFi BSSID using platform channels.
-  ///
-  /// Can return null if BSSID information is not available.
-  static Future<String?> get bssid => platform.invokeMethod('bssid');
 }
