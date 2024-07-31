@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:milkcollection/app/utils/network_check.dart';
 import 'package:milkcollection/app/utils/utils.dart';
 
@@ -291,7 +293,7 @@ class HomeController extends GetxController {
     super.onReady();
     await checkIp();
 
-    // await fetchMilkCollectionDateWise();
+    await fetchMilkCollectionDateWise();
   }
 
   @override
@@ -661,11 +663,18 @@ class HomeController extends GetxController {
     );
   }
 
+  // Future<List<int>> futureTask() async {
+  //   await Future.delayed(const Duration(seconds: 5));
+  //   return [55, 99];
+  // }
+
   void printerSocketConnection(Socket client, String ip) {
     client.listen(
       (Uint8List data) {
         ipvCheck = true;
         final message = String.fromCharCodes(data);
+
+        // client.add(data);
 
         if (kDebugMode) {
           print("printer :$message");
@@ -692,6 +701,9 @@ class HomeController extends GetxController {
           client.write(printDetailsPaymentFarmer);
           printPaymentDetails = false;
         }
+
+        // client.flush();
+        // client.destroy();
       },
       onError: (error) {
         // client.destroy();
@@ -707,15 +719,24 @@ class HomeController extends GetxController {
       (Uint8List data) {
         final message = String.fromCharCodes(data);
 
-        if (kDebugMode) {
-          print("weight :$message");
-        }
-        if (kDebugMode) {
-          print(message);
-        }
+        // if (kDebugMode) {
+        //   print("weight :$message");
+        // }
+        // if (kDebugMode) {
+        //   print(message);
+        // }
 
-        quantity = message.replaceAll("N", "").toString().replaceAll("n", "");
-        // collectmilkController.quantity = message.replaceAll("N", "");
+        quantity = message
+            .replaceAll(RegExp("[a-zA-Z]"), "")
+            .replaceAll("=", "")
+            .replaceAll(RegExp(r'[~!@#$%^&*()_+`{}|<>?;:./,=\-[]]'), "")
+            .toString();
+        print("quantity: $quantity");
+        // quantity = message
+        //     .replaceAll("N", "")
+        //     .replaceAll("=lt", "")
+        //     .toString()
+        //     .replaceAll("n", "");
       },
       onError: (error) {
         // client.destroy();
