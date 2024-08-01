@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -481,33 +482,16 @@ class CollectmilkController extends GetxController {
 
   String getFarmerIdFinal() {
     var farmerfinalId = "";
-    if ((box.read(centerIdConst).toString()).length == 1) {
-      if (farmerId.length == 1) {
-        farmerfinalId = "${box.read(centerIdConst)}000$farmerId";
-      } else if (farmerId.length == 2) {
-        farmerfinalId = "${box.read(centerIdConst)}00$farmerId";
-      } else if (farmerId.length == 3) {
-        farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
-      } else if (farmerId.length == 4) {
-        farmerfinalId = box.read(centerIdConst).toString() + farmerId;
-        // }
-      }
-    } else if ((box.read(centerIdConst).toString()).length > 1 &&
-        (box.read(centerIdConst).toString()).length < 3) {
-      if (farmerId.length == 1) {
-        farmerfinalId = "${box.read(centerIdConst)}00$farmerId";
-      } else if (farmerId.length == 2) {
-        farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
-      } else if (farmerId.length == 3) {
-        farmerfinalId = "${box.read(centerIdConst)}$farmerId";
-      }
-    } else if ((box.read(centerIdConst).toString()).length > 2 &&
-        (box.read(centerIdConst).toString()).length < 4) {
-      if (farmerId.length == 1) {
-        farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
-      } else if (farmerId.length == 2) {
-        farmerfinalId = "${box.read(centerIdConst)}$farmerId";
-      }
+
+    if (farmerId.length == 1) {
+      farmerfinalId = "${box.read(centerIdConst)}000$farmerId";
+    } else if (farmerId.length == 2) {
+      farmerfinalId = "${box.read(centerIdConst)}00$farmerId";
+    } else if (farmerId.length == 3) {
+      farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
+    } else {
+      farmerfinalId = box.read(centerIdConst).toString() + farmerId;
+      // }
     }
 
     return farmerfinalId;
@@ -917,6 +901,25 @@ class CollectmilkController extends GetxController {
     }
   }
 
+  // Future<void> sendCollectionUsingIsolate() async {
+  //   final receivePort = ReceivePort();
+
+  //   await Isolate.spawn(sendCollection, receivePort.sendPort);
+
+  //   final result = await receivePort.first;
+
+  //   if (result == "accepted") {
+  //     // Handle success
+  //     progress = false;
+  //   } else if (result == "failed") {
+  //     // Handle failure
+  //     progress = false;
+  //   } else if (result == "error") {
+  //     // Handle error
+  //     progress = false;
+  //   }
+  // }
+
   Future<void> sendCollection() async {
     Map<String, dynamic> _body = {
       "Collection_Date":
@@ -951,19 +954,23 @@ class CollectmilkController extends GetxController {
           body: _body);
       if (res.statusCode == 200 && jsonDecode(res.body) == "Inserted") {
         // Utils.showSnackbar("accepted!");
+        // sendPort.send("accepted");
         progress = false;
         //  ;
       } else {
         progress = false;
+        // sendPort.send("failed");
       }
     } catch (e) {
       progress = false;
+      emptyData();
+      // sendPort.send("error");
     }
     // emptyData();
   }
 
-  Future<void> accept() async {
-    bool result = await InternetConnection().hasInternetAccess;
+  Future<void> accept(bool result) async {
+    // bool result = await InternetConnection().hasInternetAccess;
     await milkCollectionDB.create(
         FarmerId: int.parse(getFarmerIdFinal()),
         Added_Water: !check

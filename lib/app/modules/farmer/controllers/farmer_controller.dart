@@ -167,12 +167,9 @@ class FarmerController extends GetxController {
       if (box.read(centerIdConst).length == 1) {
         farmerfinalId = "${box.read(centerIdConst)}0001";
       } else if (box.read(centerIdConst).length == 2) {
-        farmerfinalId = "${box.read(centerIdConst)}001";
+        farmerfinalId = "${box.read(centerIdConst)}0001";
       } else if (box.read(centerIdConst).length == 3) {
-        farmerfinalId = "${box.read(centerIdConst)}01";
-      } else if (box.read(centerIdConst).length == 4) {
-        farmerfinalId = "${box.read(centerIdConst)}1";
-        // }
+        farmerfinalId = "${box.read(centerIdConst)}0001";
       }
     } else {
       farmerfinalId = "${Get.arguments[1] + 1}";

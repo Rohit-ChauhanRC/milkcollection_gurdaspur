@@ -166,7 +166,7 @@ class PaymentDetailWidget extends StatelessWidget {
                       style: Theme.of(Get.context!)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 9),
                     ),
                   ],
                 ),
@@ -196,7 +196,7 @@ class PaymentDetailWidget extends StatelessWidget {
                       style: Theme.of(Get.context!)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 9),
                     ),
                   ],
                 ),
@@ -225,7 +225,7 @@ class PaymentDetailWidget extends StatelessWidget {
                       style: Theme.of(Get.context!)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 9),
                     ),
                   ],
                 ),
@@ -252,7 +252,7 @@ class PaymentDetailWidget extends StatelessWidget {
                       style: Theme.of(Get.context!)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 9),
                     ),
                   ],
                 ),
@@ -278,7 +278,7 @@ class PaymentDetailWidget extends StatelessWidget {
                       style: Theme.of(Get.context!)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 9),
                     ),
                   ],
                 ),
@@ -305,7 +305,7 @@ class PaymentDetailWidget extends StatelessWidget {
                       style: Theme.of(Get.context!)
                           .textTheme
                           .titleSmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 9),
                     ),
                   ],
                 ),
@@ -329,10 +329,11 @@ class PaymentDetailWidget extends StatelessWidget {
                       amt,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.visible,
-                      style: Theme.of(Get.context!)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(fontSize: 10),
+                      style:
+                          Theme.of(Get.context!).textTheme.titleSmall!.copyWith(
+                                fontSize: 9,
+                                overflow: TextOverflow.visible,
+                              ),
                     ),
                   ],
                 ),

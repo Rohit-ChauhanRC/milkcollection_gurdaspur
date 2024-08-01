@@ -315,12 +315,13 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                 label: "Please enter fat...",
                                 textController: controller.fat,
                                 onChanged: (v) => controller.fatDC = v,
+                                // keyboardType: TextInputType.text,
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
-                                        decimal: true),
+                                        decimal: true, signed: false),
                                 inputFormatters: [
                                   DecimalTextInputFormatter(decimalRange: 1),
-                                  LengthLimitingTextInputFormatter(3),
+                                  // LengthLimitingTextInputFormatter(3),
                                 ],
                                 // maxLength: 3,
                               ),
@@ -675,22 +676,25 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                       (controller.radio == 1 ||
                                           controller.radio == 0) &&
                                       (double.parse(controller.getPriceData()) >
-                                          0)) {
+                                          0.0)) {
                                     if (double.parse(controller
                                             .homeController.quantity) >
-                                        0) {
+                                        0.0) {
                                       controller.progress = true;
-                                      await controller.accept();
+                                      await controller.accept(result);
                                       await controller.printData();
+                                      controller.progress = false;
+
                                       await controller.homeController
                                           .fetchMilkCollectionDateWise();
                                       if (result) {
-                                        await controller.sendCollection();
                                         await controller.checkSmsFlag();
+
+                                        await controller.sendCollection();
                                       }
 
                                       controller.emptyData();
-                                      controller.progress = false;
+                                      // controller.progress = false;
                                     }
                                   }
                                 },
@@ -709,7 +713,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                               controller.radio == 0) &&
                                           (double.parse(
                                                   controller.getPriceData()) >
-                                              0)
+                                              0.0)
                                       ? double.parse(controller
                                                   .homeController.quantity) >
                                               0
@@ -744,17 +748,20 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                         0)) {
                                   if (double.parse(controller.quantityDC) > 0) {
                                     controller.progress = true;
-                                    await controller.accept();
+                                    await controller.accept(result);
                                     await controller.printData();
+                                    controller.progress = false;
 
-                                    if (result) {
-                                      await controller.sendCollection();
-                                      await controller.checkSmsFlag();
-                                    }
                                     await controller.homeController
                                         .fetchMilkCollectionDateWise();
+
+                                    if (result) {
+                                      await controller.checkSmsFlag();
+
+                                      await controller.sendCollection();
+                                    }
+
                                     controller.emptyData();
-                                    controller.progress = false;
                                   }
                                 }
                               },
