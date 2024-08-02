@@ -642,10 +642,16 @@ class CollectmilkController extends GetxController {
                     }
                   });
                 },
-                child: Text(
-                  DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate)),
-                  style: Theme.of(Get.context!).textTheme.displaySmall,
-                ),
+                child: Obx(() => fromDate.isNotEmpty
+                    ? Text(
+                        DateFormat("dd-MMM-yyyy")
+                            .format(DateTime.parse(fromDate)),
+                        style: Theme.of(Get.context!).textTheme.displaySmall,
+                      )
+                    : Text(
+                        DateFormat("dd-MMM-yyyy").format(DateTime.now()),
+                        style: Theme.of(Get.context!).textTheme.displaySmall,
+                      )),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -922,8 +928,11 @@ class CollectmilkController extends GetxController {
 
   Future<void> sendCollection() async {
     Map<String, dynamic> _body = {
-      "Collection_Date":
-          DateFormat("dd-MMM-yyyy").format(DateTime.now()).toString(),
+      "Collection_Date": fromDate.isNotEmpty
+          ? DateFormat("dd-MMM-yyyy")
+              .format(DateTime.parse(fromDate))
+              .toString()
+          : DateFormat("dd-MMM-yyyy").format(DateTime.now()).toString(),
       "Inserted_Time": DateFormat("HH:mm:ss").format(DateTime.now()).toString(),
       "Calculations_ID": (box.read(calculationsId) ?? 0 + 1).toString(),
       "FarmerId": getFarmerIdFinal(),
