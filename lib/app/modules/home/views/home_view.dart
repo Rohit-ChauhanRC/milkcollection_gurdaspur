@@ -228,30 +228,35 @@ class HomeView extends GetView<HomeController> {
                           itemCount: controller.milkCollectionData.length,
                           itemBuilder: (ctx, i) {
                             return collectionTable(
-                              amtV: controller.milkCollectionData[i].totalAmt
+                              amtV: controller.milkCollectionData[i].totalAmt!
+                                  .toPrecision(2)
                                   .toString(),
                               fId: controller.milkCollectionData[i].farmerId
                                   .toString(),
                               fNmae: controller.milkCollectionData[i].farmerName
                                   .toString(),
-                              fatV: controller.milkCollectionData[i].fat
+                              fatV: controller.milkCollectionData[i].fat!
+                                  .toPrecision(2)
                                   .toString(),
                               miltType: controller
                                   .milkCollectionData[i].milkType
                                   .toString(),
                               priceV: controller
-                                  .milkCollectionData[i].ratePerLiter
+                                  .milkCollectionData[i].ratePerLiter!
+                                  .toPrecision(2)
                                   .toString(),
                               qtyV: controller.milkCollectionData[i].qty!
-                                  .toDouble()
-                                  .ceil()
+                                  .toPrecision(2)
                                   .toString(),
-                              snfV: controller.milkCollectionData[i].snf
+                              snfV: controller.milkCollectionData[i].snf!
+                                  .toPrecision(2)
                                   .toString(),
                               waterV: controller
-                                  .milkCollectionData[i].addedWater
+                                  .milkCollectionData[i].addedWater!
+                                  .toPrecision(2)
                                   .toString(),
-                              density: controller.milkCollectionData[i].density
+                              density: controller.milkCollectionData[i].density!
+                                  .toPrecision(2)
                                   .toString(),
                             );
                           }),
