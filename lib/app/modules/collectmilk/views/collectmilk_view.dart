@@ -321,7 +321,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                         decimal: true, signed: false),
                                 inputFormatters: [
                                   DecimalTextInputFormatter(decimalRange: 1),
-                                  // LengthLimitingTextInputFormatter(3),
+                                  LengthLimitingTextInputFormatter(4),
                                 ],
                                 // maxLength: 3,
                               ),
@@ -369,7 +369,9 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                         decimal: true),
                                 inputFormatters: [
                                   DecimalTextInputFormatter(decimalRange: 1),
-                                  LengthLimitingTextInputFormatter(3),
+                                  LengthLimitingTextInputFormatter(4),
+
+                                  // LengthLimitingTextInputFormatter(3),
                                 ],
                                 // maxLength: 10,
                               ),
@@ -470,7 +472,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                             decimal: true),
                         inputFormatters: [
                           DecimalTextInputFormatter(decimalRange: 1),
-                          LengthLimitingTextInputFormatter(3),
+                          // LengthLimitingTextInputFormatter(3),
                         ],
                         // maxLength: 3,
                       ),
