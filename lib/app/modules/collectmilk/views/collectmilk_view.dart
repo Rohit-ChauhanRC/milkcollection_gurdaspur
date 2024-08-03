@@ -742,11 +742,13 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                     controller.waterDC.isNotEmpty &&
                                     controller.quantityDC.isNotEmpty &&
                                     controller.snfDC.isNotEmpty &&
+                                    controller.densityDC.isNotEmpty &&
                                     (controller.radio == 1 ||
                                         controller.radio == 0) &&
                                     (double.parse(controller.getPriceData()) >
-                                        0)) {
-                                  if (double.parse(controller.quantityDC) > 0) {
+                                        0.0)) {
+                                  if (double.parse(controller.quantityDC) >
+                                      0.0) {
                                     controller.progress = true;
                                     await controller.accept(result);
                                     await controller.printData();
@@ -771,6 +773,7 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                             (controller.fatDC.isNotEmpty) &&
                                             controller.farmerData.farmerName !=
                                                 "Unknown" &&
+                                            controller.densityDC.isNotEmpty &&
                                             (controller.waterDC.isNotEmpty) &&
                                             (controller
                                                 .quantityDC.isNotEmpty) &&
@@ -779,8 +782,9 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                             controller.radio == 0) &&
                                         (double.parse(
                                                 controller.getPriceData()) >
-                                            0)
-                                    ? double.parse(controller.quantityDC) > 0 &&
+                                            0.0)
+                                    ? double.parse(controller.quantityDC) >
+                                                0.0 &&
                                             controller.farmerIdC.text.isNotEmpty
                                         ? AppColors.green
                                         : const Color.fromARGB(

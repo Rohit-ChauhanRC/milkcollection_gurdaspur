@@ -281,7 +281,7 @@ class CollectmilkController extends GetxController {
           if (fatDC.isNotEmpty &&
               snfDC.isNotEmpty &&
               quantityDC.isNotEmpty &&
-              double.parse(quantityDC) > 0) {
+              double.parse(quantityDC) > 0.0) {
             if (double.parse(fatDC) == double.parse(rateCMChartData[i].fat) &&
                 double.parse(snfDC) == double.parse(rateCMChartData[i].snf)) {
               totalAmountP =
@@ -297,7 +297,7 @@ class CollectmilkController extends GetxController {
                 double.parse(homeController.snf) ==
                     double.parse(rateCMChartData[i].snf) &&
                 homeController.quantity.isNotEmpty &&
-                double.parse(homeController.quantity) > 0) {
+                double.parse(homeController.quantity) > 0.0) {
               totalAmountP = (((rateCMChartData[i].price) *
                           double.parse(homeController.quantity))
                       .toPrecision(2))
@@ -312,7 +312,7 @@ class CollectmilkController extends GetxController {
           if (fatDC.isNotEmpty &&
               snfDC.isNotEmpty &&
               quantityDC.isNotEmpty &&
-              double.parse(quantityDC) > 0) {
+              double.parse(quantityDC) > 0.0) {
             if (double.parse(fatDC) == double.parse(rateBMChartData[i].fat) &&
                 double.parse(snfDC) == double.parse(rateBMChartData[i].snf)) {
               totalAmountP =
@@ -328,7 +328,7 @@ class CollectmilkController extends GetxController {
                 double.parse(homeController.snf) ==
                     double.parse(rateBMChartData[i].snf) &&
                 homeController.quantity.isNotEmpty &&
-                double.parse(homeController.quantity) > 0) {
+                double.parse(homeController.quantity) > 0.0) {
               totalAmountP = (((rateBMChartData[i].price) *
                           double.parse(homeController.quantity))
                       .toPrecision(2))

@@ -844,7 +844,7 @@ class HomeController extends GetxController {
 
     for (var i = 0; i < milkCollectionData.length; i++) {
       farmDet +=
-          "${milkCollectionData[i].farmerId.toString().substring(milkCollectionData[i].farmerId.toString().length - 3, milkCollectionData[i].farmerId.toString().length)} ${milkCollectionData[i].milkType!.replaceAll("M", "")} ${milkCollectionData[i].qty} ${milkCollectionData[i].fat} ${milkCollectionData[i].snf} ${milkCollectionData[i].density ?? 0.0} ${milkCollectionData[i].ratePerLiter} ${milkCollectionData[i].totalAmt!.toPrecision(1)}\n";
+          "${milkCollectionData[i].farmerId.toString().substring(milkCollectionData[i].farmerId.toString().length - 3, milkCollectionData[i].farmerId.toString().length)} ${milkCollectionData[i].milkType!.replaceAll("M", "")} ${milkCollectionData[i].qty!.toPrecision(2)} ${milkCollectionData[i].fat!.toPrecision(1)} ${milkCollectionData[i].snf!.toPrecision(1)} ${milkCollectionData[i].density!.toPrecision(2) ?? 0.0} ${milkCollectionData[i].ratePerLiter!.toPrecision(2)} ${milkCollectionData[i].totalAmt!.toPrecision(2)}\n";
     }
 
     var prin = """
@@ -854,7 +854,7 @@ Date         :   ${DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate))}
 Shift        :   ${radio == 1 ? "Am" : "Pm"}
                 
     Cow Milk
-Total qty..........$totalMilkCow
+Total qty..........${totalMilkCow.toPrecision(2)}
 Avg Fat............${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Density........${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
@@ -862,7 +862,7 @@ Avg Rate...........${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow.toDouble()).
 Total Amt..........${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
         
     Buffallo Milk
-Total qty..........$totalMilkBuffallo
+Total qty..........${totalMilkBuffallo.toPrecision(2)}
 Avg Fat............${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Rate...........${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
@@ -870,7 +870,7 @@ Avg Density........${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / tot
 Total Amt..........${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
 
     Total milk
-Total qty..........${totalMilkBuffallo + totalMilkCow}
+Total qty..........${(totalMilkBuffallo + totalMilkCow).toPrecision(2)}
 Avg Fat............${totalMilk > 0 ? (totalFat / totalMilk).toPrecision(2) : 0.0}
 Avg Snf............${totalMilk > 0 ? (totalSnf / totalMilk).toPrecision(2) : 0.0}
 Avg Density........${totalMilk > 0 ? ((totalDensity ?? 0.0) / totalQty).toPrecision(2) : 0.0}
@@ -1011,7 +1011,7 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
 
     for (var i = 0; i < milkCollectionData.length; i++) {
       farmDet +=
-          "${milkCollectionData[i].farmerId.toString().substring(milkCollectionData[i].farmerId.toString().length - 3, milkCollectionData[i].farmerId.toString().length)} ${milkCollectionData[i].milkType} ${milkCollectionData[i].qty} ${milkCollectionData[i].fat} ${milkCollectionData[i].snf} ${milkCollectionData[i].ratePerLiter} ${milkCollectionData[i].totalAmt}\n";
+          "${milkCollectionData[i].farmerId.toString().substring(milkCollectionData[i].farmerId.toString().length - 3, milkCollectionData[i].farmerId.toString().length)} ${milkCollectionData[i].milkType} ${milkCollectionData[i].qty!.toPrecision(2)} ${milkCollectionData[i].fat!.toPrecision(1)} ${milkCollectionData[i].snf!.toPrecision(1)} ${milkCollectionData[i].ratePerLiter!.toPrecision(2)} ${milkCollectionData[i].totalAmt!.toPrecision(2)}\n";
     }
 
     var prin = """
@@ -1021,7 +1021,7 @@ Date         :   ${DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate))}
 Shift        :   ${radio == 1 ? "Am" : "Pm"}
                 
     Cow Milk
-Total qty..........$totalMilkCow
+Total qty..........${totalMilkCow.toPrecision(2)}
 Avg Fat............${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Density........${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalQtyCow.toDouble()).toPrecision(2) : 0.0}
@@ -1029,7 +1029,7 @@ Avg Rate...........${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow).toPrecision
 Total Amt..........${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
         
     Buffallo Milk
-Total qty..........$totalMilkBuffallo
+Total qty..........${totalMilkBuffallo.toPrecision(2)}
 Avg Fat............${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Snf............${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
 Avg Density........${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalQtyBuffallo.toDouble()).toPrecision(2) : 0.0}
@@ -1037,7 +1037,7 @@ Avg Rate...........${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffal
 Total Amt..........${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
 
     Total milk
-Total qty..........${totalMilkBuffallo + totalMilkCow}
+Total qty..........${(totalMilkBuffallo + totalMilkCow).toPrecision(2)}
 Avg Fat............${totalMilk > 0 ? (totalFat / totalMilk).toPrecision(2) : 0.0}
 Avg Snf............${totalMilk > 0 ? (totalSnf / totalMilk).toPrecision(2) : 0.0}
 Avg Density........${totalMilk > 0 ? ((totalDensity ?? 0.0) / totalQty).toPrecision(2) : 0.0}
@@ -1108,27 +1108,27 @@ Total cans     ${int.parse("${cowCans.isNotEmpty ? cowCans : 0}") + int.parse("$
 MAK LIFE
 Centre ID : ${box.read(centerIdConst)}
 (${box.read(centerName)})
-Date        : ${DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate))}
-Shift       : ${radio == 1 ? "Am" : "Pm"}
-- - -  - - - - - - - - - - -
+Date         : ${DateFormat("dd-MMM-yyyy").format(DateTime.parse(fromDate))}
+Shift         : ${radio == 1 ? "Am" : "Pm"}
+- - - - - - - - - - - - - - - - - - - -
 CM
-Total qty   : $totalMilkCow
-Avg Fat     : ${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
-Avg Snf     : ${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
+Total qty     : ${totalMilkCow.toPrecision(2)}
+Avg Fat       : ${totalQtyCow > 0 ? (totalFatCow / totalMilkCow).toPrecision(2) : 0.0}
+Avg Snf       : ${totalQtyCow > 0 ? (totalSnfCow / totalMilkCow).toPrecision(2) : 0.0}
 Avg Dnsty   : ${totalQtyCow > 0 ? ((totalDensityCow ?? 0.0) / totalMilkCow).toPrecision(2) : 0.0}
-Avg Rate    : ${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow).toPrecision(2) : 0.0}
-Total Amt   : ${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
-- - - - - - - - - - - - - -
+Avg Rate     : ${totalQtyCow > 0 ? (totalPriceCow / totalQtyCow).toPrecision(2) : 0.0}
+Total Amt    : ${totalQtyCow > 0 ? totalAmtCow.toPrecision(2) : 0.0}
+- - - - - - - - - - - - - - - - - - - -
 BM
-Total qty   : $totalMilkBuffallo
-Avg Fat     : ${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
-Avg Snf     : ${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
-Avg Dnsty   : ${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalMilkBuffallo).toPrecision(2) : 0.0}
-Avg Rate    : ${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo).toPrecision(2) : 0.0}
-Total Amt   : ${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
-- - - - - - - - - - -
-Total Ltrs  : ${totalMilkCow + totalMilkBuffallo}
-Total Amt   : ${(totalAmtCow + totalAmtBuffallo).toPrecision(2)}
+Total qty      : ${totalMilkBuffallo.toPrecision(2)}
+Avg Fat        : ${totalQtyBuffallo > 0 ? (totalFatBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
+Avg Snf        : ${totalQtyBuffallo > 0 ? (totalSnfBuffallo / totalMilkBuffallo).toPrecision(2) : 0.0}
+Avg Dnsty    : ${totalQtyBuffallo > 0 ? ((totalDensityBuffallo ?? 0.0) / totalMilkBuffallo).toPrecision(2) : 0.0}
+Avg Rate      : ${totalQtyBuffallo > 0 ? (totalPriceBuffallo / totalQtyBuffallo).toPrecision(2) : 0.0}
+Total Amt     : ${totalQtyBuffallo > 0 ? totalAmtBuffallo.toPrecision(2) : 0.0}
+- - - - - - - - - - - - - - - - - - - -
+Total Ltrs      : ${(totalMilkCow + totalMilkBuffallo).toPrecision(2)}
+Total Amt      : ${(totalAmtCow + totalAmtBuffallo).toPrecision(2)}
 """;
       List<String> recipents = [];
       if (mob1.isNotEmpty) {
@@ -1169,7 +1169,7 @@ Total Amt   : ${(totalAmtCow + totalAmtBuffallo).toPrecision(2)}
 
     for (var i = 0; i < data.length; i++) {
       farmDet +=
-          "${data[i].idNo}      ${data[i].farmerName}\n${data[i].totalQty} ${data[i].totalAmount} ${data[i].paymentId} ${data[i].payGenerationDate.toString().substring(5)}\n";
+          "${data[i].idNo}      ${data[i].farmerName}\n${double.parse(data[i].totalQty.toString()).toPrecision(2)} ${double.parse(data[i].totalAmount.toString()).toPrecision(2)} ${data[i].paymentId} ${data[i].payGenerationDate.toString().substring(5)}\n";
     }
     var prin = """
 Center Id   : ${box.read(centerIdConst)}
@@ -1194,10 +1194,10 @@ $farmDet
     late double totalAmt = 0.0;
     late double totalQty = 0.0;
     for (var i = 0; i < data.length; i++) {
-      totalAmt += double.parse(data[i].totalAmount.toString());
-      totalQty += double.parse(data[i].quantity.toString());
+      totalAmt += double.parse(data[i].totalAmount.toString()).toPrecision(2);
+      totalQty += double.parse(data[i].quantity.toString()).toPrecision(2);
       farmDet +=
-          "${data[i].collectionDate.toString().substring(0, 2)} ${data[i].shift} ${data[i].milkType.toString().substring(0, 1)} ${double.parse(data[i].fat.toString()).toPrecision(1)} ${double.parse(data[i].snf.toString()).toPrecision(1)} ${data[i].quantity.toString()} ${data[i].rate} ${data[i].totalAmount}\n";
+          "${data[i].collectionDate.toString().substring(0, 2)} ${data[i].shift} ${data[i].milkType.toString().substring(0, 1)} ${double.parse(data[i].fat.toString()).toPrecision(1)} ${double.parse(data[i].snf.toString()).toPrecision(1)} ${double.parse(data[i].quantity.toString()).toPrecision(2)} ${double.parse(data[i].rate.toString()).toPrecision(2)} ${double.parse(data[i].totalAmount.toString()).toPrecision(2)}\n";
     }
 
     printDetailsPaymentFarmer = """
@@ -1210,8 +1210,8 @@ F Name : $farmerName
 From:$fromDateP To:$toDateP 
 Dt Sf M Fat Snf Qty Price Amt
 $farmDet
-Total Quantity : $totalQty
-Total Amount   : $totalAmt
+Total Quantity : ${totalQty.toPrecision(2)}
+Total Amount   : ${totalAmt.toPrecision(2)}
 
 
 

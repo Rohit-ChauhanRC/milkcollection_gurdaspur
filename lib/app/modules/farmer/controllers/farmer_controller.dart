@@ -96,10 +96,16 @@ class FarmerController extends GetxController {
   String get farmerId => _farmerId.value;
   set farmerId(String mob) => _farmerId.value = mob;
 
+  final RxString _fId = ''.obs;
+  String get fId => _fId.value;
+  set fId(String mob) => _fId.value = mob;
+
   @override
   void onInit() async {
     super.onInit();
     type = Get.arguments[0];
+    print(Get.arguments);
+    fId = Get.arguments[1].toString();
     if (Get.arguments[0] == true) {
       // farmerFormKey.currentState!.reset();
       title = "Farmer Detail";
@@ -143,7 +149,7 @@ class FarmerController extends GetxController {
   }
 
   Future<void> getFarmerById() async {
-    await farmerDB.fetchById(Get.arguments[1].toString()).then((value) {
+    await farmerDB.fetchById(fId.toString()).then((value) {
       farmerName = value.farmerName.toString();
       bankName = value.bankName.toString();
       branchName = value.branchName.toString();
@@ -163,7 +169,7 @@ class FarmerController extends GetxController {
 
   String getFarmerIdFinal() {
     var farmerfinalId = "";
-    if (Get.arguments[1] == 0) {
+    if (int.parse(fId) == 0) {
       if (box.read(centerIdConst).length == 1) {
         farmerfinalId = "${box.read(centerIdConst)}0001";
       } else if (box.read(centerIdConst).length == 2) {
@@ -172,7 +178,7 @@ class FarmerController extends GetxController {
         farmerfinalId = "${box.read(centerIdConst)}0001";
       }
     } else {
-      farmerfinalId = "${Get.arguments[1] + 1}";
+      farmerfinalId = "${int.parse(fId) + 1}";
     }
 
     return farmerfinalId;
@@ -245,7 +251,7 @@ class FarmerController extends GetxController {
   Future<void> localFarmerUpdate(bool result) async {
     await farmerDB
         .update(
-            farmerId: Get.arguments[1],
+            farmerId: int.parse(fId),
             address: address,
             aadharCardNo: aadharCard,
             mobileNumber: mobileNumber,
@@ -269,7 +275,8 @@ class FarmerController extends GetxController {
       var res = await http.post(
         Uri.parse("$baseUrlConst/$updateFarmerDetailsConst"),
         body: {
-          "CalculationsID": Get.arguments[1].toString(),
+          "FarmerID": fId.toString(),
+          "CalculationsID": fId.toString(),
           "FarmerName": farmerName,
           "BankName": bankName.isNotEmpty ? bankName : "null",
           "BranchName": branchName.isNotEmpty ? branchName : "null",
