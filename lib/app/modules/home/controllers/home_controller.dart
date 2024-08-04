@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:milkcollection/app/utils/network_check.dart';
 import 'package:milkcollection/app/utils/utils.dart';
 
@@ -108,9 +107,9 @@ class HomeController extends GetxController {
   double get totalMilk => _totalMilk.value;
   set totalMilk(double i) => _totalMilk.value = i;
 
-  final RxInt _totalQty = 0.obs;
-  int get totalQty => _totalQty.value;
-  set totalQty(int i) => _totalQty.value = i;
+  final RxDouble _totalQty = 0.0.obs;
+  double get totalQty => _totalQty.value;
+  set totalQty(double i) => _totalQty.value = i;
 
   final RxDouble _totalFat = 0.0.obs;
   double get totalFat => _totalFat.value;
@@ -792,7 +791,30 @@ class HomeController extends GetxController {
       // totalMilk = 0.0;
       totalAmtCow = 0.0;
       totalAmtBuffallo = 0.0;
-      totalQty = milkCollectionData.length;
+      totalMilkBuffallo = 0.0;
+      totalMilkCow = 0.0;
+      totalMilk = 0.0;
+      totalFat = 0.0;
+      totalSnf = 0.0;
+      totalWater = 0.0;
+      totalDensity = 0.0;
+      totalPrice = 0.0;
+      totalAmt = 0.0;
+      totalQtyCow = 0;
+      totalMilkCow = 0.0;
+      totalFatCow = 0.0;
+      totalSnfCow = 0.0;
+      totalWaterCow = 0.0;
+      totalPriceCow = 0.0;
+      totalDensityCow = 0.0;
+      totalQtyBuffallo = 0;
+      totalFatBuffallo = 0.0;
+      totalSnfBuffallo = 0.0;
+      totalWaterBuffallo = 0.0;
+      totalPriceBuffallo = 0.0;
+      totalDensityBuffallo = 0.0;
+
+      totalQty = milkCollectionData.length.toDouble();
       for (var i = 0; i < milkCollectionData.length; i++) {
         //
         totalMilk += milkCollectionData[i].qty ?? 1.0;

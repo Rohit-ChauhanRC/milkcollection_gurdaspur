@@ -134,7 +134,9 @@ class HomeView extends GetView<HomeController> {
                               intrinsicWidget(
                                 title1: "Tot. Milk",
                                 value1: controller.totalMilk >= 1.0
-                                    ? controller.totalMilk.toString()
+                                    ? controller.totalMilk
+                                        .toPrecision(2)
+                                        .toString()
                                     : "0.0",
                                 title2: "Avg Fat",
                                 value2: controller.totalFat >= 1.0 &&
@@ -447,8 +449,7 @@ class HomeView extends GetView<HomeController> {
             children: [
               InkWell(
                 onTap: () async {
-                  // await controller.getRateChartBM("B");
-                  // await controller.getRateChartCM("C");
+                  // controller.printShift();
                   Get.toNamed(
                     Routes.COLLECTMILK,
                   );
