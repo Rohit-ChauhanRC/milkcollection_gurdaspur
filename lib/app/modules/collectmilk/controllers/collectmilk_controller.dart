@@ -162,6 +162,12 @@ class CollectmilkController extends GetxController {
   String get fromDate => _fromDate.value;
   set fromDate(String str) => _fromDate.value = str;
 
+  final RxList<MilkCollectionModel> _milkCollectionData =
+      RxList<MilkCollectionModel>();
+  List<MilkCollectionModel> get milkCollectionData => _milkCollectionData;
+  set milkCollectionData(List<MilkCollectionModel> lst) =>
+      _milkCollectionData.assignAll(lst);
+
   @override
   void onInit() async {
     super.onInit();
@@ -169,6 +175,7 @@ class CollectmilkController extends GetxController {
     // await checkIp();
 
     farmerDataList.assignAll(await farmerDB.fetchAll());
+    milkCollectionData.assignAll(await milkCollectionDB.fetchAll());
 
     if (DateTime.now().hour < 12) {
       shiftTime = 1;
@@ -179,9 +186,6 @@ class CollectmilkController extends GetxController {
     }
     await Permission.storage.request();
 
-    // WidgetsBinding.instance.initInstances();
-    // await getCollectionThirtyDaysData();
-    // await getRateChart();
     await getRateCMChart();
     await getRateBMChart();
   }
@@ -189,7 +193,7 @@ class CollectmilkController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    // await getRateChart();
+    await checkCollection();
   }
 
   @override
@@ -371,6 +375,7 @@ class CollectmilkController extends GetxController {
             pd.update(value: count += 1);
 
             milkCollectionDB.create(
+              Calculations_ID: e.calculationsId.toString(),
               Added_Water: e.addedWater,
               Analyze_Mode: e.analyzeMode,
               CollectionCenterId: e.collectionCenterId.toString(),
@@ -391,6 +396,7 @@ class CollectmilkController extends GetxController {
               Shift: e.shift,
               Total_Amt: e.totalAmt,
               FUploaded: 1,
+              density: e.density,
             );
           }
           pd.close();
@@ -399,11 +405,34 @@ class CollectmilkController extends GetxController {
     } catch (e) {}
   }
 
+  Future<void> checkCollection() async {
+    bool b = false;
+    circularProgress = true;
+    bool result = await InternetConnection().hasInternetAccess;
+
+    for (var i = 0; i < milkCollectionData.length; i++) {
+      if (milkCollectionData[i].FUploaded == 0) {
+        b = true;
+      }
+    }
+    if (box.read(backupCollectionConst) !=
+            DateFormat("dd-MMM-yyyy")
+                .format(DateTime.parse(fromDate))
+                .toString() &&
+        b == false &&
+        result == true) {
+      await getCollectionThirtyDaysData().then((onValue) async {
+        await homeController.fetchMilkCollectionDateWise();
+      });
+    }
+    circularProgress = false;
+  }
+
   Future<void> getCollectionThirtyDaysData() async {
     try {
       var res = await http.get(
           Uri.parse(
-            "$baseUrlConst/$restoreDataConst?CollectionCenterId=${box.read("centerId")}&FromDate=${dateFormat(DateTime.now().subtract(const Duration(days: 30)))}&ToDate=${dateFormat(DateTime.now())}",
+            "$baseUrlConst/$restoreDataConst?CollectionCenterId=${box.read("centerId")}&FromDate=${dateFormat(DateTime.now().subtract(const Duration(days: 20)))}&ToDate=${dateFormat(DateTime.now())}",
           ),
           headers: {"Content-Type": "application/json"});
 
@@ -417,6 +446,7 @@ class CollectmilkController extends GetxController {
           await milkCollectionDB.deleteTable().then((value) async {
             for (var e in restoreData) {
               await milkCollectionDB.create(
+                Calculations_ID: e.calculationsId.toString(),
                 Added_Water: e.addedWater,
                 Analyze_Mode: e.analyzeMode,
                 CollectionCenterId: e.collectionCenterId.toString(),
@@ -437,11 +467,17 @@ class CollectmilkController extends GetxController {
                 Shift: e.shift,
                 Total_Amt: e.totalAmt,
                 FUploaded: 1,
+                density: e.density,
               );
             }
           });
 
           box.write(calculationsId, restoreData.last.calculationsId);
+          box.write(
+              backupCollectionConst,
+              DateFormat("dd-MMM-yyyy")
+                  .format(DateTime.parse(fromDate))
+                  .toString());
         }
         // restoreData.assignAll([]);
       } else {
@@ -934,7 +970,7 @@ class CollectmilkController extends GetxController {
               .toString()
           : DateFormat("dd-MMM-yyyy").format(DateTime.now()).toString(),
       "Inserted_Time": DateFormat("HH:mm:ss").format(DateTime.now()).toString(),
-      "Calculations_ID": (box.read(calculationsId) ?? 0 + 1).toString(),
+      "Calculations_ID": getFarmerIdFinal(),
       "FarmerId": getFarmerIdFinal(),
       "Farmer_Name": farmerData.farmerName,
       "Collection_Mode": !check ? manualConst : autoConst,
@@ -981,6 +1017,7 @@ class CollectmilkController extends GetxController {
   Future<void> accept(bool result) async {
     // bool result = await InternetConnection().hasInternetAccess;
     await milkCollectionDB.create(
+        Calculations_ID: getFarmerIdFinal(),
         FarmerId: int.parse(getFarmerIdFinal()),
         Added_Water: !check
             ? double.parse(water.text)

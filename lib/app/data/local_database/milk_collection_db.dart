@@ -30,6 +30,7 @@ class MilkCollectionDB {
     "Total_Amt" REAL,
     "CollectionCenterId" INTEGER,
     "CollectionCenterName" TEXT,
+    "Calculations_ID" TEXT,
     "Shift" TEXT,
     "FUploaded" INTEGER,
     PRIMARY KEY("id" AUTOINCREMENT)
@@ -42,6 +43,7 @@ class MilkCollectionDB {
   Future<void> create({
     int? FarmerId,
     String? Farmer_Name,
+    String? Calculations_ID,
     String? Collection_Date,
     String? Inserted_Time,
     String? Collection_Mode,
@@ -66,9 +68,10 @@ class MilkCollectionDB {
       final database = await DataBaseService().database;
       await database.rawInsert(
         '''
-        INSERT INTO $tableName (Collection_Date,Inserted_Time,FarmerId,Farmer_Name,Collection_Mode,Scale_Mode,Analyze_Mode,Milk_Status,Milk_Type,Rate_Chart_Name,Qty,FAT,SNF,Density,Added_Water,Rate_Per_Liter,Total_Amt,CollectionCenterId,CollectionCenterName,Shift,FUploaded) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        INSERT INTO $tableName (Calculations_ID,Collection_Date,Inserted_Time,FarmerId,Farmer_Name,Collection_Mode,Scale_Mode,Analyze_Mode,Milk_Status,Milk_Type,Rate_Chart_Name,Qty,FAT,SNF,Density,Added_Water,Rate_Per_Liter,Total_Amt,CollectionCenterId,CollectionCenterName,Shift,FUploaded) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
       ''',
         [
+          Calculations_ID,
           Collection_Date,
           Inserted_Time,
           FarmerId,
@@ -147,7 +150,7 @@ class MilkCollectionDB {
   }
 
   Future<int> update({
-    int? farmerId,
+    String? farmerId,
     int? FUploaded,
   }) async {
     final database = await DataBaseService().database;
@@ -156,7 +159,7 @@ class MilkCollectionDB {
       {
         if (FUploaded != null) 'FUploaded': FUploaded,
       },
-      where: 'FarmerId = ?',
+      where: 'Calculations_ID = ?',
       conflictAlgorithm: ConflictAlgorithm.rollback,
       whereArgs: [farmerId],
     );
@@ -178,7 +181,7 @@ class MilkCollectionDB {
 
   void onUpgrade(Database db, int oldVersion, int newVersion) {
     if (oldVersion < newVersion) {
-      db.execute("ALTER TABLE $tableName ADD COLUMN FUploaded TEXT;");
+      db.execute("ALTER TABLE $tableName ADD COLUMN Calculations_ID TEXT;");
     }
   }
 }

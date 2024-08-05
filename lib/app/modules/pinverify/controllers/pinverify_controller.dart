@@ -91,12 +91,12 @@ class PinverifyController extends GetxController {
         await getFamerDataDB().then((v) async {
           await getFarmerList().then((value) async {
             await postMilkCollectionDataDB().then((value) async {
-              await geMilkCollectionList().then((v) {
-                box.write(verifyConst, true).then((value) => {
-                      circularProgress = false,
-                      Get.offNamed(Routes.HOME),
-                    });
-              });
+              // await geMilkCollectionList().then((v) {
+              box.write(verifyConst, true).then((value) => {
+                    circularProgress = false,
+                    Get.offNamed(Routes.HOME),
+                  });
+              // });
             });
           });
         });
@@ -174,7 +174,7 @@ class PinverifyController extends GetxController {
               body: {
                 "Collection_Date": e.collectionDate.toString(),
                 "Inserted_Time": e.insertedTime.toString(),
-                "Calculations_ID": "",
+                "Calculations_ID": e.farmerId,
                 "FarmerId": e.farmerId.toString(),
                 "Farmer_Name": e.farmerName.toString(),
                 "Collection_Mode": e.collectionMode.toString(),
@@ -207,7 +207,7 @@ class PinverifyController extends GetxController {
 
             if (res.statusCode == 200) {
               await milkCollectionDB.update(
-                  farmerId: e.farmerId!, FUploaded: 1);
+                  farmerId: e.calculationsId!, FUploaded: 1);
             }
           } catch (e) {}
         }
@@ -220,48 +220,51 @@ class PinverifyController extends GetxController {
   }
 
   Future<void> geMilkCollectionList() async {
-    try {
-      var res = await http.get(
-          Uri.parse(
-            "$baseUrlConst/$restoreDataConst?CollectionCenterId=${box.read("centerId")}&FromDate=${dateFormat(DateTime.now().subtract(const Duration(days: 90)))}&ToDate=${dateFormat(DateTime.now())}",
-          ),
-          headers: {"Content-Type": "application/json"});
+    if (restoreData.isEmpty) {
+      try {
+        var res = await http.get(
+            Uri.parse(
+              "$baseUrlConst/$restoreDataConst?CollectionCenterId=${box.read("centerId")}&FromDate=${dateFormat(DateTime.now().subtract(const Duration(days: 30)))}&ToDate=${dateFormat(DateTime.now())}",
+            ),
+            headers: {"Content-Type": "application/json"});
 
-      if (res.statusCode == 200) {
-        restoreData.assignAll([]);
-        restoreData.assignAll(milkCollectionModelFromMap(res.body));
-        if (restoreData.isNotEmpty) {
-          int count = 0;
+        if (res.statusCode == 200) {
+          restoreData.assignAll([]);
+          restoreData.assignAll(milkCollectionModelFromMap(res.body));
+          if (restoreData.isNotEmpty) {
+            int count = 0;
 
-          milkCollectionDB.deleteTable();
-          for (var e in restoreData) {
-            milkCollectionDB.create(
-              Added_Water: e.addedWater,
-              Analyze_Mode: e.analyzeMode,
-              CollectionCenterId: e.collectionCenterId.toString(),
-              CollectionCenterName: e.collectionCenterName,
-              Collection_Date: e.collectionDate,
-              Collection_Mode: e.collectionMode,
-              FAT: e.fat,
-              FarmerId: e.farmerId,
-              Farmer_Name: e.farmerName,
-              Inserted_Time: e.insertedTime,
-              Milk_Status: e.milkStatus,
-              Milk_Type: e.milkType,
-              Qty: e.qty,
-              Rate_Chart_Name: e.rateChartName,
-              Rate_Per_Liter: e.ratePerLiter,
-              SNF: e.snf,
-              Scale_Mode: e.scaleMode,
-              Shift: e.shift,
-              Total_Amt: e.totalAmt,
-              FUploaded: 1,
-              density: e.density,
-            );
+            milkCollectionDB.deleteTable();
+            for (var e in restoreData) {
+              milkCollectionDB.create(
+                Calculations_ID: e.calculationsId.toString(),
+                Added_Water: e.addedWater,
+                Analyze_Mode: e.analyzeMode,
+                CollectionCenterId: e.collectionCenterId.toString(),
+                CollectionCenterName: e.collectionCenterName,
+                Collection_Date: e.collectionDate,
+                Collection_Mode: e.collectionMode,
+                FAT: e.fat,
+                FarmerId: e.farmerId,
+                Farmer_Name: e.farmerName,
+                Inserted_Time: e.insertedTime,
+                Milk_Status: e.milkStatus,
+                Milk_Type: e.milkType,
+                Qty: e.qty,
+                Rate_Chart_Name: e.rateChartName,
+                Rate_Per_Liter: e.ratePerLiter,
+                SNF: e.snf,
+                Scale_Mode: e.scaleMode,
+                Shift: e.shift,
+                Total_Amt: e.totalAmt,
+                FUploaded: 1,
+                density: e.density,
+              );
+            }
           }
-        }
-      } else {}
-    } catch (e) {}
+        } else {}
+      } catch (e) {}
+    }
   }
 
   Future<void> getFarmerList() async {
