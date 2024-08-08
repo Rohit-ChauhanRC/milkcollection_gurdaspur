@@ -174,7 +174,7 @@ class PinverifyController extends GetxController {
               body: {
                 "Collection_Date": e.collectionDate.toString(),
                 "Inserted_Time": e.insertedTime.toString(),
-                "Calculations_ID": e.farmerId,
+                "Calculations_ID": e.farmerId.toString(),
                 "FarmerId": e.farmerId.toString(),
                 "Farmer_Name": e.farmerName.toString(),
                 "Collection_Mode": e.collectionMode.toString(),
