@@ -40,7 +40,6 @@ class HomeView extends GetView<HomeController> {
                           initialEntryMode: DatePickerEntryMode.calendarOnly,
                         ).then((selectedDate) async {
                           controller.fromDate = selectedDate!.toIso8601String();
-                          print(controller.fromDate);
 
                           await controller.fetchMilkCollectionDateWise();
                         });
@@ -69,7 +68,6 @@ class HomeView extends GetView<HomeController> {
                                 value: 1,
                                 groupValue: controller.radio,
                                 onChanged: (int? i) {
-                                  print(i);
                                   controller.radio = i!;
                                   controller.fetchMilkCollectionDateWise();
                                 },
@@ -96,7 +94,6 @@ class HomeView extends GetView<HomeController> {
                                 value: 2,
                                 groupValue: controller.radio,
                                 onChanged: (int? i) {
-                                  print(i);
                                   controller.radio = i!;
                                   controller.fetchMilkCollectionDateWise();
                                 },
@@ -126,7 +123,6 @@ class HomeView extends GetView<HomeController> {
                 child: Column(
                   children: [
                     Obx(() => Container(
-                          // margin: const EdgeInsets.all(15),
                           alignment: Alignment.center,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

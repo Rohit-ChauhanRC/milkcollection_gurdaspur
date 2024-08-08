@@ -71,7 +71,6 @@ class CollectmilkView extends GetView<CollectmilkController> {
                       await controller.getVerifyPin();
                     },
                   );
-                  // await controller.getVerifyPin();
                 }
               } else {
                 await controller.exportExcel();
@@ -123,7 +122,6 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                     value: 0,
                                     groupValue: controller.radio,
                                     onChanged: (int? i) {
-                                      // print(i);
                                       controller.radio = 0;
                                       controller.getRateCMChart();
                                       if (double.parse(controller.homeController
@@ -695,7 +693,6 @@ class CollectmilkView extends GetView<CollectmilkController> {
                     Obx(() => !controller.progress
                         ? Container(
                             width: Get.width,
-                            // padding: const EdgeInsets.all(20),
                             margin: EdgeInsets.only(
                                 top: 15.h, left: 35.w, right: 35.w),
                             child: controller.check
@@ -735,7 +732,6 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                             }
 
                                             controller.emptyData();
-                                            // controller.progress = false;
                                           }
                                         }
                                       },

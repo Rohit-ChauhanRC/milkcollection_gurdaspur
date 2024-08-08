@@ -6,7 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:milkcollection/app/constants/contants.dart';
 import 'package:milkcollection/app/data/local_database/farmer_db.dart';
 import 'package:milkcollection/app/data/models/farmer_list_model.dart';
@@ -104,10 +103,8 @@ class FarmerController extends GetxController {
   void onInit() async {
     super.onInit();
     type = Get.arguments[0];
-    print(Get.arguments);
     fId = Get.arguments[1].toString();
     if (Get.arguments[0] == true) {
-      // farmerFormKey.currentState!.reset();
       title = "Farmer Detail";
       await getFarmerById();
     } else {
@@ -161,7 +158,6 @@ class FarmerController extends GetxController {
       numberOfBuffalo = value.noOfBuffalos.toString();
       address = value.address.toString();
       radio = value.modeOfPay!;
-      // address1.text = value.address.toString();
     }).then((value) {
       progressBar = false;
     });
@@ -170,13 +166,7 @@ class FarmerController extends GetxController {
   String getFarmerIdFinal() {
     var farmerfinalId = "";
     if (int.parse(fId) == 0) {
-      if (box.read(centerIdConst).length == 1) {
-        farmerfinalId = "${box.read(centerIdConst)}0001";
-      } else if (box.read(centerIdConst).length == 2) {
-        farmerfinalId = "${box.read(centerIdConst)}0001";
-      } else if (box.read(centerIdConst).length == 3) {
-        farmerfinalId = "${box.read(centerIdConst)}0001";
-      }
+      farmerfinalId = "${box.read(centerIdConst)}0001";
     } else {
       farmerfinalId = "${int.parse(fId) + 1}";
     }
@@ -188,8 +178,6 @@ class FarmerController extends GetxController {
     try {
       final _body = <String, String>{
         "CalculationsID": getFarmerIdFinal().toString(),
-        // "FarmerID": getFarmerIdFinal(),
-        // "F_ID": getFarmerIdFinal(),
         "FarmerName": farmerName,
         "BankName": bankName.isNotEmpty ? bankName : "NA",
         "BranchName": branchName.isNotEmpty ? branchName : "NA",
@@ -210,16 +198,12 @@ class FarmerController extends GetxController {
       };
       var res = await http.post(Uri.parse("$baseUrlConst/$addFarmerConst"),
           body: _body);
-      print(jsonDecode(res.body));
-      print(_body);
 
       if (res.statusCode == 200 && jsonDecode(res.body) == "Added succes..") {
         Utils.showSnackbar("Add Successfully!");
       }
       circularProgress = true;
     } catch (e) {
-      // apiLopp(i);
-      print(e);
       circularProgress = true;
     }
   }
@@ -260,7 +244,6 @@ class FarmerController extends GetxController {
             modeOfPay: radio)
         .then((value) {
       Utils.showSnackbar("Farmer details updated..");
-      // Get.back();
     });
     if (result) {
       Get.back();
@@ -305,13 +288,11 @@ class FarmerController extends GetxController {
           "Access-Control-Allow-Methods": "POST, OPTIONS, GET"
         },
       );
-      print(jsonDecode(res.body));
 
       if (res.statusCode == 200) {}
       circularProgress = true;
     } catch (e) {
       // apiLopp(i);
-      print(e);
       circularProgress = true;
     }
   }

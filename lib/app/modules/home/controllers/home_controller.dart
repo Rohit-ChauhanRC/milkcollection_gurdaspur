@@ -325,7 +325,6 @@ class HomeController extends GetxController {
           ? cansModel.first.bufCans.toString()
           : "";
     }
-    // printSummary = true;
   }
 
   Future<void> getRateChartBM(
@@ -525,14 +524,6 @@ class HomeController extends GetxController {
                 addr.address.startsWith('172'))) {
           ip = addr.address.split(".").getRange(0, 3).join(".");
 
-          /*
-          (interface.name.startsWith("swlan") ||
-                interface.name.startsWith("ap") ||
-                interface.name.startsWith("'en0'") ||
-                interface.name.startsWith("wlan0") ||
-                interface.name.startsWith("ccmni0")
-           */
-
           for (var i = 0; i < 255; i++) {
             anaylzerConnection("$ip.$i");
 
@@ -565,13 +556,6 @@ class HomeController extends GetxController {
     }
   }
 
-  String generateRandomIPv6Address(String prefix) {
-    final random = Random();
-    final segments = List.generate(
-        4, (_) => random.nextInt(0xFFFF).toRadixString(16).padLeft(4, '0'));
-    return '$prefix:${segments.join(':')}';
-  }
-
   Future<void> weighingConnection(
     String ip,
   ) async {
@@ -594,12 +578,9 @@ class HomeController extends GetxController {
   }
 
   Future<void> printerConnection(String ip) async {
-    // final ip = InternetAddress.anyIPv4;
     try {
       final server = await ServerSocket.bind(ip, 8883, shared: true);
       server.listen((event) {
-        // socket = event;
-
         printerSocketConnection(event, ip);
       });
     } catch (e) {}
@@ -610,11 +591,7 @@ class HomeController extends GetxController {
       (Uint8List data) {
         final message = String.fromCharCodes(data);
 
-        // if (kDebugMode) {
         print("analyser: $message");
-        // }
-
-        final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
 
         if (message
                 .split(" ")[1]
@@ -634,16 +611,6 @@ class HomeController extends GetxController {
                 .toString()
                 .length >
             6) {
-          // if (alphanumeric.hasMatch(message
-          //         .split(" ")[1]
-          //         .replaceAll("Hex", "")
-          //         .replaceAll("@", "")) ==
-          //     true) {
-          //   // if (kDebugMode) {
-          //   print(
-          //       "error: ${message.split(" ")[1].replaceAll("Hex", "").replaceAll("@", "").toString()}");
-          //   // }
-          // } else {
           fat =
               "${message.split(" ")[1].split("@")[1]}.${message.split(" ")[1].split("@")[2]}";
           snf =
@@ -667,18 +634,11 @@ class HomeController extends GetxController {
     );
   }
 
-  // Future<List<int>> futureTask() async {
-  //   await Future.delayed(const Duration(seconds: 5));
-  //   return [55, 99];
-  // }
-
   void printerSocketConnection(Socket client, String ip) {
     client.listen(
       (Uint8List data) {
         ipvCheck = true;
         final message = String.fromCharCodes(data);
-
-        // client.add(data);
 
         if (kDebugMode) {
           print("printer :$message");
@@ -705,16 +665,9 @@ class HomeController extends GetxController {
           client.write(printDetailsPaymentFarmer);
           printPaymentDetails = false;
         }
-
-        // client.flush();
-        // client.destroy();
       },
-      onError: (error) {
-        // client.destroy();
-      },
-      onDone: () {
-        // client.destroy();
-      },
+      onError: (error) {},
+      onDone: () {},
     );
   }
 
@@ -723,31 +676,14 @@ class HomeController extends GetxController {
       (Uint8List data) {
         final message = String.fromCharCodes(data);
 
-        // if (kDebugMode) {
-        //   print("weight :$message");
-        // }
-        // if (kDebugMode) {
-        //   print(message);
-        // }
-
         quantity = message
             .replaceAll(RegExp("[a-zA-Z]"), "")
             .replaceAll("=", "")
             .replaceAll(RegExp(r'[~!@#$%^&*()_+`{}|<>?;:./,=\-[]]'), "")
             .toString();
-        print("quantity: $quantity");
-        // quantity = message
-        //     .replaceAll("N", "")
-        //     .replaceAll("=lt", "")
-        //     .toString()
-        //     .replaceAll("n", "");
       },
-      onError: (error) {
-        // client.destroy();
-      },
-      onDone: () {
-        // client.destroy();
-      },
+      onError: (error) {},
+      onDone: () {},
     );
   }
 
@@ -766,10 +702,7 @@ class HomeController extends GetxController {
     printSummaryData =
         "***Maklife Producer Company Ltd***\n\nDate  :  ${DateFormat("dd-MMM-yyyy").format(DateTime.now())}\nTime  :  $shift\nFarmerName    :     $farmerName\nFarmer Id     :     $getFarmerId\nFat           :     $fat1\nSnf           :     $snf1\nDensity       :     ${density ?? 0.0}\nMilk Type     :     $milkType\nWeight        :     $quantity1\nPrice         :     $price\nAmount        :     $totalAmount\n          \n                      \n          \n       \n               \n           \n";
     printStatus = true;
-    // homeController.socket!.write("collectionPrint");
   }
-
-  // fetchByDate
 
   void dbTask(List<dynamic> args) async {
     SendPort sendPort = args[0];
@@ -916,7 +849,6 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
         """;
 
     return prin;
-    // return commonPrint() + promMilk() + farmDet.toString() + cansCowBuf();
   }
 
   Future<void> checkShiftForCans() async {
@@ -925,7 +857,6 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
   }
 
   Future<void> printShiftDetails() async {
-    // farmerPrintD
     printDetails = true;
     await canReceivedPost();
   }
@@ -938,7 +869,6 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
         backgroundColor: AppColors.white,
         title: "Total Cans",
         titleStyle: Theme.of(Get.context!).textTheme.displayMedium,
-        // title: success ? Strings.success : title,
         content: Column(
           children: [
             Align(
@@ -957,7 +887,6 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
               label: "Please enter Pin...",
               onChanged: (val) {
                 cowCans = val;
-                // print(initialValue);
               },
               keyboardType: const TextInputType.numberWithOptions(
                 signed: false,
@@ -966,7 +895,6 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              // maxLength: 10,
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -984,7 +912,6 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
               label: "Please enter Pin...",
               onChanged: (val) {
                 bufCans = val;
-                // print(initialValue);
               },
               keyboardType: const TextInputType.numberWithOptions(
                 signed: false,
@@ -993,11 +920,9 @@ Total cans     ${int.parse("${bufCans.isNotEmpty ? bufCans : 0}") + int.parse("$
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              // maxLength: 10,
             ),
           ],
         ),
-        // cancel: ,
         confirm: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -1080,7 +1005,6 @@ Total cans     ${int.parse("${cowCans.isNotEmpty ? cowCans : 0}") + int.parse("$
         """;
 
     return prin;
-    // return commonPrint() + promMilk() + farmDet.toString() + cansCowBuf();
   }
 
   Future<void> checkSmsFlag() async {
@@ -1090,8 +1014,6 @@ Total cans     ${int.parse("${cowCans.isNotEmpty ? cowCans : 0}") + int.parse("$
           "$baseUrlConst/getcenter_mobile?centerid=${box.read(centerIdConst)}"),
     );
     if (res.statusCode == 200) {
-      // centerMobileSmsModel
-      //     .assignAll(centerMobileSmsModelFromMap(jsonDecode(res.body)));
       final ctx = centerMobileSmsModelFromMap(res.body);
       if (ctx.isNotEmpty) {
         sendMessage(ctx.first.mobile1.toString(), ctx.first.mobile2.toString(),
@@ -1127,10 +1049,6 @@ Total cans     ${int.parse("${cowCans.isNotEmpty ? cowCans : 0}") + int.parse("$
   Future<void> sendMessage(String mob1, String mob2, String mob3) async {
     await Permission.sms.request();
     try {
-      // final _telephonySMS = TelephonySMS();
-
-      // await _telephonySMS.requestPermission();
-      // await _telephonySMS.sendSMS(phone: mob, message: "MESSAGE");
       String message = """
 MAK LIFE
 Centre ID : ${box.read(centerIdConst)}
@@ -1169,7 +1087,6 @@ Total Amt      : ${(totalAmtCow + totalAmtBuffallo).toPrecision(2)}
       }
 
       await sendSMS(message: message, recipients: recipents, sendDirect: true);
-      // print(_result);
     } catch (e) {}
   }
 

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:isolate';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +46,6 @@ class CollectmilkController extends GetxController {
   final HomeController homeController =
       Get.put<HomeController>(HomeController());
 
-  // final PinverifyController pinverifyController = Get.find();
   final FarmerDB farmerDB = FarmerDB();
 
   late ServerSocket weightServerSocket;
@@ -77,10 +75,6 @@ class CollectmilkController extends GetxController {
   final Rx<FarmerListModel> _farmerData = Rx(FarmerListModel());
   FarmerListModel get farmerData => _farmerData.value;
   set farmerData(FarmerListModel lst) => _farmerData.value = lst;
-
-  // final RxString _fName = ''.obs;
-  // String get fNam => _fName.value;
-  // set fName(String mob) => _fName.value = mob;
 
   final RxList<FarmerListModel> _farmerDataList = RxList<FarmerListModel>();
   List<FarmerListModel> get farmerDataList => _farmerDataList;
@@ -144,8 +138,6 @@ class CollectmilkController extends GetxController {
   int get shiftTime => _shiftTime.value;
   set shiftTime(int i) => _shiftTime.value = i;
 
-  // late Rx<Socket> printer;
-
   final RxBool _printD = false.obs;
   bool get printD => _printD.value;
   set printD(bool v) => _printD.value = v;
@@ -171,8 +163,6 @@ class CollectmilkController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
-    // await checkIp();
 
     farmerDataList.assignAll(await farmerDB.fetchAll());
     milkCollectionData.assignAll(await milkCollectionDB.fetchAll());
@@ -239,11 +229,8 @@ class CollectmilkController extends GetxController {
               double.parse(fatDC) == double.parse(rateCMChartData[i].fat) &&
               double.parse(snfDC) == double.parse(rateCMChartData[i].snf)) {
             priceP = rateCMChartData[i].price.toPrecision(2).toString();
-            // print(price);
           }
         } else {
-          // homeController.
-
           if (double.parse(homeController.fat) ==
                   double.parse(rateCMChartData[i].fat) &&
               double.parse(homeController.snf) ==
@@ -260,10 +247,8 @@ class CollectmilkController extends GetxController {
               double.parse(fatDC) == double.parse(rateBMChartData[i].fat) &&
               double.parse(snfDC) == double.parse(rateBMChartData[i].snf)) {
             priceP = rateBMChartData[i].price.toPrecision(2).toString();
-            // print(price);
           }
         } else {
-          // homeController.
           if (double.parse(homeController.fat) ==
                   double.parse(rateBMChartData[i].fat) &&
               double.parse(homeController.snf) ==
@@ -438,11 +423,8 @@ class CollectmilkController extends GetxController {
 
       if (res.statusCode == 200) {
         restoreData.assignAll([]);
-        // print("res: ${res}");
-        // print("res: ${jsonDecode(res.body.toString())}");
         restoreData.assignAll(milkCollectionModelFromMap(res.body));
         if (restoreData.isNotEmpty) {
-          // print(restoreData.length.toString());
           await milkCollectionDB.deleteTable().then((value) async {
             for (var e in restoreData) {
               await milkCollectionDB.create(
@@ -479,13 +461,8 @@ class CollectmilkController extends GetxController {
                   .format(DateTime.parse(fromDate))
                   .toString());
         }
-        // restoreData.assignAll([]);
-      } else {
-        // print(jsonDecode(res.body));
-      }
-    } catch (e) {
-      // print(e.toString());
-    }
+      } else {}
+    } catch (e) {}
   }
 
   getFarmerId() async {
@@ -527,12 +504,9 @@ class CollectmilkController extends GetxController {
       farmerfinalId = "${box.read(centerIdConst)}0$farmerId";
     } else {
       farmerfinalId = box.read(centerIdConst).toString() + farmerId;
-      // }
     }
 
     return farmerfinalId;
-    // farmerData =
-    //     await pinverifyController.farmerDB.fetchById(farmerfinalId.toString());
   }
 
   Future<void> getVerifyPin() async {
@@ -561,9 +535,7 @@ class CollectmilkController extends GetxController {
       } else {
         Utils.showSnackbar("Pin Expired Of Your Collection Centre!");
       }
-    } catch (e) {
-      // Utils.showSnackbar("Pin Expired Of Your Collection Centre!");
-    }
+    } catch (e) {}
   }
 
   void showDialogManualPin({
@@ -589,12 +561,9 @@ class CollectmilkController extends GetxController {
             signed: false,
           ),
           inputFormatters: [
-            // TextInputFormatter(decimalRange: 1),
             FilteringTextInputFormatter.digitsOnly,
           ],
-          // maxLength: 10,
         ),
-        // cancel: ,
         confirm: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -638,7 +607,6 @@ class CollectmilkController extends GetxController {
         backgroundColor: AppColors.white,
         title: "Please Select Shift",
         titleStyle: Theme.of(Get.context!).textTheme.displayMedium,
-        // title: success ? Strings.success : title,
         content: Container(
           margin: const EdgeInsets.all(10),
           child: Row(
@@ -746,8 +714,6 @@ class CollectmilkController extends GetxController {
             ],
           ),
         ),
-
-        // cancel: ,
         confirm: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -790,8 +756,6 @@ class CollectmilkController extends GetxController {
   Future<void> exportExcel() async {
     exportData.assignAll(await milkCollectionDB.fetchAll());
 
-    // milkCollectionModelToMap(await milkCollectionDB.fetchAll());
-
     if (exportData.isNotEmpty) {
       Excel excel = Excel.createExcel();
       excel.rename(excel.getDefaultSheet()!,
@@ -830,7 +794,6 @@ class CollectmilkController extends GetxController {
           )
           ..cellStyle = CellStyle(
             fontSize: 10,
-            // bold: true,
             backgroundColorHex: ExcelColor.yellow,
             fontColorHex: ExcelColor.black,
           );
@@ -935,32 +898,10 @@ class CollectmilkController extends GetxController {
         ..createSync(recursive: true)
         ..writeAsBytesSync(fileBytes!);
 
-      // OpenFilex.open('${directory.path}/output_file_name2.xlsx');
       await Share.shareXFiles([XFile('${directory.path}/CollectionData.xlsx')],
           text: 'CollectionData.xlsx');
-
-      // }
     }
   }
-
-  // Future<void> sendCollectionUsingIsolate() async {
-  //   final receivePort = ReceivePort();
-
-  //   await Isolate.spawn(sendCollection, receivePort.sendPort);
-
-  //   final result = await receivePort.first;
-
-  //   if (result == "accepted") {
-  //     // Handle success
-  //     progress = false;
-  //   } else if (result == "failed") {
-  //     // Handle failure
-  //     progress = false;
-  //   } else if (result == "error") {
-  //     // Handle error
-  //     progress = false;
-  //   }
-  // }
 
   Future<void> sendCollection() async {
     Map<String, dynamic> _body = {
@@ -998,24 +939,19 @@ class CollectmilkController extends GetxController {
           ),
           body: _body);
       if (res.statusCode == 200 && jsonDecode(res.body) == "Inserted") {
-        // Utils.showSnackbar("accepted!");
-        // sendPort.send("accepted");
         progress = false;
-        //  ;
+        emptyData();
       } else {
         progress = false;
-        // sendPort.send("failed");
+        emptyData();
       }
     } catch (e) {
       progress = false;
       emptyData();
-      // sendPort.send("error");
     }
-    // emptyData();
   }
 
   Future<void> accept(bool result) async {
-    // bool result = await InternetConnection().hasInternetAccess;
     await milkCollectionDB.create(
         Calculations_ID: getFarmerIdFinal(),
         FarmerId: int.parse(getFarmerIdFinal()),
@@ -1045,11 +981,9 @@ class CollectmilkController extends GetxController {
         Shift: shift.capitalizeFirst,
         Total_Amt: double.parse(getTotalAmount()),
         FUploaded: result ? 1 : 0);
-    // await homeController.fetchMilkCollectionDateWise();
   }
 
   void emptyData() {
-    // _farmerId.close();
     farmerId = "";
     printD = true;
     fat.clear();
@@ -1058,14 +992,12 @@ class CollectmilkController extends GetxController {
     quantity.clear();
 
     farmerData = FarmerListModel();
-    // radio = 0;
     homeController.fat = "";
     homeController.snf = "";
     homeController.water = "";
     homeController.quantity = "";
     farmerIdC.clear();
     progress = false;
-    // update();
     fatDC = "";
     snfDC = "";
     waterDC = "";
