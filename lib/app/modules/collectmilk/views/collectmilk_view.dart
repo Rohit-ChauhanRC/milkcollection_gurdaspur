@@ -706,6 +706,10 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                                 .isNotEmpty &&
                                             controller.farmerData.farmerName !=
                                                 "Unknown" &&
+                                            controller.farmerData.farmerName !=
+                                                "null" &&
+                                            controller.farmerData.farmerName !=
+                                                null  &&
                                             controller.homeController.water
                                                 .isNotEmpty &&
                                             controller.homeController.quantity
@@ -742,6 +746,10 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                                     controller
                                                             .farmerData.farmerName !=
                                                         "Unknown" &&
+                                            controller.farmerData.farmerName !=
+                                                "null" &&
+                                            controller.farmerData.farmerName !=
+                                                null &&
                                                     (controller.homeController
                                                         .water.isNotEmpty) &&
                                                     (controller
@@ -778,6 +786,10 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                           controller.fatDC.isNotEmpty &&
                                           controller.farmerData.farmerName !=
                                               "Unknown" &&
+                                          controller.farmerData.farmerName !=
+                                              "null" &&
+                                          controller.farmerData.farmerName !=
+                                              null  &&
                                           controller.waterDC.isNotEmpty &&
                                           controller.quantityDC.isNotEmpty &&
                                           controller.snfDC.isNotEmpty &&
@@ -816,6 +828,12 @@ class CollectmilkView extends GetView<CollectmilkController> {
                                                   controller.farmerData
                                                           .farmerName !=
                                                       "Unknown" &&
+                                                  controller.farmerData
+                                                          .farmerName !=
+                                                      "null" &&
+                                                  controller.farmerData
+                                                          .farmerName !=
+                                                      null &&
                                                   controller
                                                       .densityDC.isNotEmpty &&
                                                   (controller
